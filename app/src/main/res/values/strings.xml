@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">finalProject</string>
+    <string name="new_file_button">Create New File</string>
+    <string name="load_file_button">Load From File</string>
+    <string name="dialog_title">SurveyTitle</string>
+    <string name="dialog_create">Create</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_hint">Title</string>
+    <string name="action_settings">Settings</string>
+</resources>
