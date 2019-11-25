@@ -6,12 +6,10 @@
     <string name="dialog_create">Create</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_hint">Title</string>
-    <string name="variables">Variables</string>
-    <string name="qualitative">Qualitative</string>
-    <string name="quantitative">Quantitative</string>
+    <string name="variables_title">Variables</string>
     <string name="new_variable">Add Variable</string>
     <string name="use_labels">Labeled Entries</string>
-    <string name="new_survey">Create Sample</string>
+    <string name="new_survey">Create Survey</string>
     <string name="remove_variable">Remove</string>
     <string-array name="variable_types">
         <item>Categorical</item>
