@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/variablePrompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/dialog_new_variable_hint"
+        android:inputType="textPersonName" />
+
+    <ToggleButton
+        android:id="@+id/variableTypeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ToggleButton"
+        android:textAllCaps="false"
+        android:textOff="@string/variable_type_quantitative"
+        android:textOn="@string/variable_type_categorical"
+        android:textSize="14sp"
+        android:typeface="normal" />
+
+</LinearLayout>

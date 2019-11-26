@@ -23,10 +23,10 @@ public class Variable {
    * @param isCategorical is a categorical variable or else is quantitative
    */
   Variable(@NonNull final String varName, final boolean isCategorical) {
-    String name = varName;
-    boolean categorical = isCategorical;
+    name = varName;
+    categorical = isCategorical;
     if (isCategorical) {
-      LinkedList<String> categories = new LinkedList<>();
+      categories = new LinkedList<>();
     }
   }
 

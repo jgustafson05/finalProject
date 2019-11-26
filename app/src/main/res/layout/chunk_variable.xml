@@ -11,14 +11,14 @@
         android:text="Your_Variable_Here" />
 
     <Spinner
-        android:id="@+id/varableType"
+        android:id="@+id/variableType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:entries="@array/variable_types" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/removeVariable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"

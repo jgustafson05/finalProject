@@ -31,15 +31,15 @@ public class LaunchActivity extends AppCompatActivity {
 
   private void createNewFileDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setView(R.layout.dialog_newfile);
+    builder.setView(R.layout.dialog_new_file);
 
     // Making a dialog to request title for survey
-    builder.setTitle(R.string.dialog_title)
+    builder.setTitle(R.string.dialog_new_file_title)
            .setPositiveButton(R.string.dialog_create, new DialogInterface.OnClickListener() {
              @Override
              public void onClick(final DialogInterface dialog, final int which) {
                Dialog dialogView = (Dialog) dialog;
-               TextView dialogPrompt = dialogView.findViewById(R.id.dialogPrompt);
+               TextView dialogPrompt = dialogView.findViewById(R.id.filePrompt);
                if (dialogPrompt.getText().toString().equals("")) {
                  //Alert user somehow
                  return;

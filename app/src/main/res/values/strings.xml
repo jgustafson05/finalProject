@@ -2,11 +2,15 @@
     <string name="app_name">finalProject</string>
     <string name="new_file_button">Create New File</string>
     <string name="load_file_button">Load From File</string>
-    <string name="dialog_title">SurveyTitle</string>
+    <string name="dialog_new_file_title">Survey Title</string>
+    <string name="dialog_new_variable_title">Variable Name</string>
     <string name="dialog_create">Create</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="dialog_hint">Title</string>
+    <string name="dialog_new_file_hint">Title</string>
+    <string name="dialog_new_variable_hint">Name</string>
     <string name="variables_title">Variables</string>
+    <string name="variable_type_categorical">Categorical Variable</string>
+    <string name="variable_type_quantitative">Quantitative Variable</string>
     <string name="new_variable">Add Variable</string>
     <string name="use_labels">Labeled Entries</string>
     <string name="new_survey">Create Survey</string>
