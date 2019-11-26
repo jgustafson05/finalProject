@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+/** Requires and completes creation or loading of a new file. */
 public class LaunchActivity extends AppCompatActivity {
 
   @Override
