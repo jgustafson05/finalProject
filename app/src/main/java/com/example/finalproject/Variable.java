@@ -84,4 +84,8 @@ public class Variable {
     return categorical;
   }
 
+  public void setCategorical(boolean isCategorical) {
+    categorical = isCategorical;
+  }
+
 }

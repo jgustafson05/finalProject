@@ -52,6 +52,8 @@ public class NewSurveyActivity extends AppCompatActivity {
                 }
                 variables.add(new Variable(variablePrompt.getText().toString(),
                         variableTypeButton.isActivated()));
+                //Add to the file
+                updateVariablesDisplay();
               }
             })
             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -62,7 +64,7 @@ public class NewSurveyActivity extends AppCompatActivity {
     builder.show();
   }
 
-  private void updateVariables() {
+  private void updateVariablesDisplay() {
 
   }
 
