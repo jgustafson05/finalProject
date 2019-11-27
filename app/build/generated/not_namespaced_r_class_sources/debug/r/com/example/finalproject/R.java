@@ -4907,7 +4907,9 @@ public final class R {
     public static final int mtrl_chip_anim_duration=0x7f0a000b;
     public static final int mtrl_tab_indicator_anim_duration_ms=0x7f0a000c;
     public static final int show_password_duration=0x7f0a000d;
-    public static final int status_bar_notification_info_maxnum=0x7f0a000e;
+    public static final int spinner_categorical_position=0x7f0a000e;
+    public static final int spinner_quantitative_position=0x7f0a000f;
+    public static final int status_bar_notification_info_maxnum=0x7f0a0010;
   }
   public static final class interpolator {
     public static final int mtrl_fast_out_linear_in=0x7f0b0000;
@@ -4945,8 +4947,8 @@ public final class R {
     public static final int abc_select_dialog_material=0x7f0c001a;
     public static final int abc_tooltip=0x7f0c001b;
     public static final int activity_launch=0x7f0c001c;
-    public static final int activity_new_survey=0x7f0c001d;
-    public static final int activity_scrolling=0x7f0c001e;
+    public static final int activity_main=0x7f0c001d;
+    public static final int activity_new_survey=0x7f0c001e;
     public static final int chunk_variable=0x7f0c001f;
     public static final int content_scrolling=0x7f0c0020;
     public static final int design_bottom_navigation_item=0x7f0c0021;

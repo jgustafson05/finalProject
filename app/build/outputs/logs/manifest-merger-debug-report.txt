@@ -94,10 +94,10 @@ activity#com.example.finalproject.NewSurveyActivity
 ADDED from C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:20:9-54
 	android:name
 		ADDED from C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:20:19-51
-activity#com.example.finalproject.ScrollingActivity
-ADDED from C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:9-54
+activity#com.example.finalproject.MainActivity
+ADDED from C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:9-50
 	android:name
-		ADDED from C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:19-51
+		ADDED from C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:19-47
 uses-sdk
 INJECTED from C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml

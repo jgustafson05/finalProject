@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name="NewSurveyActivity" />
-        <activity android:name="ScrollingActivity" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

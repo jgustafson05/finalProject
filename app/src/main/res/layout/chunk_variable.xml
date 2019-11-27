@@ -5,10 +5,9 @@
 
     <TextView
         android:id="@+id/variableName"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Your_Variable_Here" />
+        android:layout_weight="1" />
 
     <Spinner
         android:id="@+id/variableType"

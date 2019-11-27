@@ -2,10 +2,12 @@ package com.example.finalproject;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -35,6 +37,20 @@ public class NewSurveyActivity extends AppCompatActivity {
     Button createSurvey = findViewById(R.id.createSurvey);
 
     newVariable.setOnClickListener(unused -> createNewVariableDialog());
+    try {
+      createSurvey.setOnClickListener(unused -> {
+        //Add an 'are you sure' here?
+        Intent intent = new Intent(this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("title", surveyTitle);
+        //Add to intent here
+
+        startActivity(intent);
+        finish();
+      });
+    } catch (Exception e) {
+      System.out.println(e.toString());
+    }
   }
 
   private void createNewVariableDialog() {
@@ -68,7 +84,7 @@ public class NewSurveyActivity extends AppCompatActivity {
                 }
 
                 Variable toAdd = new Variable(variablePrompt.getText().toString(),
-                          variableTypeButton.isActivated());
+                          variableTypeButton.isChecked());
 
                 boolean addedVariable = false;
                 //Places new variable in lexicographic order
@@ -113,6 +129,13 @@ public class NewSurveyActivity extends AppCompatActivity {
       variableName.setText(variables.get(i).getName());
 
       //Set spinner default
+      Spinner variableType = variableChunk.findViewById(R.id.variableType);
+
+      int spinnerPosition = 1;
+      if (variables.get(i).isCategorical()) {
+        spinnerPosition = 0;
+      }
+      variableType.setSelection(spinnerPosition);
 
       //Setup remove button
       final Variable toRemove = variables.get(i);

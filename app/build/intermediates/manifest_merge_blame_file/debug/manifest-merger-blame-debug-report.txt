@@ -45,9 +45,9 @@
 28        <activity android:name="com.example.finalproject.NewSurveyActivity" />
 28-->C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:20:9-54
 28-->C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:20:19-51
-29        <activity android:name="com.example.finalproject.ScrollingActivity" />
-29-->C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:9-54
-29-->C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:19-51
+29        <activity android:name="com.example.finalproject.MainActivity" />
+29-->C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:9-50
+29-->C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:19-47
 30    </application>
 31
 32</manifest>
