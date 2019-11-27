@@ -2,11 +2,12 @@ package com.example.finalproject;
 
 import androidx.annotation.NonNull;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
 /** Represents a variable used in the survey, does not modify the file. */
-public class Variable {
+public class Variable implements Comparable<Variable> {
 
   /** Name of the variable. */
   private String name;
@@ -28,6 +29,10 @@ public class Variable {
     if (isCategorical) {
       categories = new LinkedList<>();
     }
+  }
+
+  public int compareTo(Variable other) {
+    return name.compareTo(other.getName());
   }
 
   /**

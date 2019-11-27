@@ -3,7 +3,9 @@ package com.example.finalproject;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -44,16 +46,39 @@ public class NewSurveyActivity extends AppCompatActivity {
               @Override
               public void onClick(final DialogInterface dialog, final int which) {
                 Dialog dialogView = (Dialog) dialog;
+
                 TextView variablePrompt = dialogView.findViewById(R.id.variablePrompt);
                 ToggleButton variableTypeButton = dialogView.findViewById(R.id.variableTypeButton);
+
                 if (variablePrompt.getText().toString().equals("")) {
+                  //Don't allow same name here
                   //Alert user somehow
                   return;
                 }
-                variables.add(new Variable(variablePrompt.getText().toString(),
-                        variableTypeButton.isActivated()));
+
+                Variable toAdd = new Variable(variablePrompt.getText().toString(),
+                        variableTypeButton.isActivated());
+                boolean addedVariable = false;
+                if (variables.size() == 0) {
+                  variables.add(0, toAdd);
+                  addedVariable = true;
+                } else {
+                  //Places new variable in lexicographic order
+                  for (int i = 0; i < variables.size(); i++) {
+                    if (toAdd.compareTo(variables.get(i)) > 0) {
+                      continue;
+                    }
+                    variables.add(i, toAdd);
+                    addedVariable = true;
+                    break;
+                  }
+                }
+                if (!addedVariable) {
+                  variables.add(toAdd);
+                }
+
                 //Add to the file
-                updateVariablesDisplay();
+                updateVariablesUI();
               }
             })
             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -64,8 +89,34 @@ public class NewSurveyActivity extends AppCompatActivity {
     builder.show();
   }
 
-  private void updateVariablesDisplay() {
+  private void updateVariablesUI() {
+    LinearLayout variablesList = findViewById(R.id.variableContainer);
 
+    //Clear current chunks
+    variablesList.setVisibility(View.GONE);
+    variablesList.removeAllViews();
+
+    for (int i = 0; i < variables.size(); i++) {
+      //Add chunk
+      View variableChunk = getLayoutInflater().inflate(R.layout.chunk_variable,
+              variablesList, false);
+
+      //Set name
+      TextView variableName = variableChunk.findViewById(R.id.variableName);
+      variableName.setText(variables.get(i).getName());
+
+      //Set spinner default
+
+      //Setup remove button
+      final Variable toRemove = variables.get(i);
+      Button removeVariable = variableChunk.findViewById(R.id.removeVariable);
+      removeVariable.setOnClickListener(unused -> {
+        variables.remove(toRemove);
+        updateVariablesUI();
+      });
+      variablesList.addView(variableChunk);
+    }
+    variablesList.setVisibility(View.VISIBLE);
   }
 
 }
