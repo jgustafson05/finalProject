@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -37,20 +38,16 @@ public class NewSurveyActivity extends AppCompatActivity {
     Button createSurvey = findViewById(R.id.createSurvey);
 
     newVariable.setOnClickListener(unused -> createNewVariableDialog());
-    try {
-      createSurvey.setOnClickListener(unused -> {
-        //Add an 'are you sure' here?
-        Intent intent = new Intent(this, MainActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("title", surveyTitle);
-        //Add to intent here
+    createSurvey.setOnClickListener(unused -> {
+      //Add an 'are you sure' here?
+      Intent intent = new Intent(this, MainActivity.class);
+      Bundle bundle = new Bundle();
+      bundle.putString("title", surveyTitle);
+      //Add to intent here
 
-        startActivity(intent);
-        finish();
-      });
-    } catch (Exception e) {
-      System.out.println(e.toString());
-    }
+      startActivity(intent);
+      finish();
+    });
   }
 
   private void createNewVariableDialog() {
@@ -136,6 +133,24 @@ public class NewSurveyActivity extends AppCompatActivity {
         spinnerPosition = 0;
       }
       variableType.setSelection(spinnerPosition);
+
+      //Spinner listener to change variable type
+      final int variableNumber = i;
+      variableType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+          if (position == 0) {
+            variables.get(variableNumber).setCategorical(true);
+          } else {
+            variables.get(variableNumber).setCategorical(false);
+          }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+      });
 
       //Setup remove button
       final Variable toRemove = variables.get(i);

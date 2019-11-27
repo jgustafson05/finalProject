@@ -1171,7 +1171,7 @@ public final class R {
         public static final int mtrl_chip_anim_duration = 0x7f0a000b;
         public static final int mtrl_tab_indicator_anim_duration_ms = 0x7f0a000c;
         public static final int show_password_duration = 0x7f0a000d;
-        public static final int status_bar_notification_info_maxnum = 0x7f0a0010;
+        public static final int status_bar_notification_info_maxnum = 0x7f0a000e;
     }
     public static final class interpolator {
         private interpolator() {}
