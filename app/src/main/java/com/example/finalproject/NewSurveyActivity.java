@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AlertDialog;
@@ -51,27 +52,33 @@ public class NewSurveyActivity extends AppCompatActivity {
                 ToggleButton variableTypeButton = dialogView.findViewById(R.id.variableTypeButton);
 
                 if (variablePrompt.getText().toString().equals("")) {
-                  //Don't allow same name here
                   //Alert user somehow
                   return;
                 }
 
-                Variable toAdd = new Variable(variablePrompt.getText().toString(),
-                        variableTypeButton.isActivated());
-                boolean addedVariable = false;
-                if (variables.size() == 0) {
-                  variables.add(0, toAdd);
-                  addedVariable = true;
-                } else {
-                  //Places new variable in lexicographic order
-                  for (int i = 0; i < variables.size(); i++) {
-                    if (toAdd.compareTo(variables.get(i)) > 0) {
-                      continue;
-                    }
-                    variables.add(i, toAdd);
-                    addedVariable = true;
-                    break;
+                for (int i = 0; i < variables.size(); i++) {
+                  if (variablePrompt.getText().toString().equals(variables.get(i).getName())) {
+                    Toast sameName = Toast.makeText(getApplicationContext(),
+                            "\"" + variablePrompt.getText().toString()
+                                    + "\"" + " is already a variable name.",
+                            Toast.LENGTH_LONG);
+                    sameName.show();
+                    return;
                   }
+                }
+
+                Variable toAdd = new Variable(variablePrompt.getText().toString(),
+                          variableTypeButton.isActivated());
+
+                boolean addedVariable = false;
+                //Places new variable in lexicographic order
+                for (int j = 0; j < variables.size(); j++) {
+                  if (toAdd.compareTo(variables.get(j)) > 0) {
+                    continue;
+                  }
+                  variables.add(j, toAdd);
+                  addedVariable = true;
+                  break;
                 }
                 if (!addedVariable) {
                   variables.add(toAdd);
