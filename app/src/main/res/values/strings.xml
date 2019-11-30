@@ -3,6 +3,7 @@
     <string name="new_file_button">Create New File</string>
     <string name="load_file_button">Load From File</string>
     <string name="dialog_new_file_title">Survey Title</string>
+    <string name="dialog_load_file_title">Load File</string>
     <string name="dialog_new_variable_title">Variable Name</string>
     <string name="dialog_create">Create</string>
     <string name="dialog_cancel">Cancel</string>
