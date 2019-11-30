@@ -102,4 +102,13 @@ public class SamplePoint {
   public boolean valueIsSet(int index) {
     return (values.get(index) != null);
   }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String newName) {
+    name = newName;
+  }
+
 }
