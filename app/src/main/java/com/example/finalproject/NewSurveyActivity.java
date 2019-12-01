@@ -40,13 +40,16 @@ public class NewSurveyActivity extends AppCompatActivity {
     newVariable.setOnClickListener(unused -> createNewVariableDialog());
     createSurvey.setOnClickListener(unused -> {
       //Add an 'are you sure' here?
-      Intent intent = new Intent(this, MainActivity.class);
-      Bundle bundle = new Bundle();
-      bundle.putString("title", surveyTitle);
-      //Add to intent here
+      if (FileWriter.writeVariables(this, surveyFile, variables)) {
 
-      startActivity(intent);
-      finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("title", surveyTitle);
+        //Add to intent here
+
+        startActivity(intent);
+        finish();
+      }
     });
   }
 

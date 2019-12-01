@@ -3,6 +3,9 @@ package com.example.finalproject;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Represents a point from the sample.
+ * does not check variables list for errors
+ * must be updated when variables are added or removed */
 public class SamplePoint {
 
   protected class Value {
@@ -60,7 +63,7 @@ public class SamplePoint {
    */
   public int getCategory(int index) {
     try {
-      if (values.get(index).isCategorical()) {
+      if (!values.get(index).isCategorical()) {
         throw new IllegalStateException("The value is not categorical.");
       }
       return (int) values.get(index).getValue();
@@ -79,7 +82,7 @@ public class SamplePoint {
   public double getMeasurement(int index) {
     try {
       if (values.get(index).isCategorical()) {
-        throw new IllegalStateException("This variable is not quantitative.");
+        throw new IllegalStateException("The value is not quantitative");
       }
       return values.get(index).getValue();
     } catch (NullPointerException e) {
@@ -87,6 +90,12 @@ public class SamplePoint {
     }
   }
 
+  /**
+   * Sets the value of a categorical variable for this SamplePoint.
+   * @param index index of the variable for this value
+   * @param sampleCategory the category of the variable for this SamplePoint
+   * @throws IndexOutOfBoundsException if no variable has been defined at this index
+   */
   public void setValue(int index, int sampleCategory) {
     try {
       values.set(index, new Value(sampleCategory));
@@ -95,8 +104,26 @@ public class SamplePoint {
     }
   }
 
+  /**
+   * Sets the value of a quantitative variable for this SamplePoint.
+   * @param index index of the variable for this value
+   * @param sampleMeasurement the measurement of the variable for this SamplePoint
+   * @throws IndexOutOfBoundsException if no variable has been defined at this index
+   */
+  public void setValue(int index, double sampleMeasurement) {
+    try {
+      values.set(index, new Value(sampleMeasurement));
+    } catch (IndexOutOfBoundsException e) {
+      throw new IndexOutOfBoundsException("There is no variable at this index");
+    }
+  }
+
   public void addVariable(int index) {
     values.add(index, null);
+  }
+
+  public void removeVariable(int index) {
+    values.remove(index);
   }
 
   public boolean valueIsSet(int index) {

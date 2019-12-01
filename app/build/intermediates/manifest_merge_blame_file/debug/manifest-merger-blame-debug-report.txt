@@ -48,6 +48,13 @@
 29        <activity android:name="com.example.finalproject.MainActivity" />
 29-->C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:9-50
 29-->C:\Users\Xymph\StudioProjects\finalProject\app\src\main\AndroidManifest.xml:21:19-47
-30    </application>
-31
-32</manifest>
+30
+31        <service
+31-->[androidx.room:room-runtime:2.2.2] C:\Users\Xymph\.gradle\caches\transforms-2\files-2.1\80f4eb0c640ca36adc200163aac8a071\room-runtime-2.2.2\AndroidManifest.xml:25:9-27:40
+32            android:name="androidx.room.MultiInstanceInvalidationService"
+32-->[androidx.room:room-runtime:2.2.2] C:\Users\Xymph\.gradle\caches\transforms-2\files-2.1\80f4eb0c640ca36adc200163aac8a071\room-runtime-2.2.2\AndroidManifest.xml:26:13-74
+33            android:exported="false" />
+33-->[androidx.room:room-runtime:2.2.2] C:\Users\Xymph\.gradle\caches\transforms-2\files-2.1\80f4eb0c640ca36adc200163aac8a071\room-runtime-2.2.2\AndroidManifest.xml:27:13-37
+34    </application>
+35
+36</manifest>

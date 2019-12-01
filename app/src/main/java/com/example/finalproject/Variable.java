@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Represents a variable used in the survey, does not modify the file. */
+/** Represents a variable used in the survey. */
 public class Variable implements Comparable<Variable> {
 
   /** Name of the variable. */
