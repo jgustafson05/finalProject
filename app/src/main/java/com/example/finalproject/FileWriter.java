@@ -18,7 +18,7 @@ public class FileWriter {
       return false;
     }
 
-    StringBuilder fileContentsBuilder = new StringBuilder("variables:\n");
+    StringBuilder fileContentsBuilder = new StringBuilder();
     for (int i = 0; i < variables.size(); i++) {
       String typeString = "f";
       String categoriesString = "null";
