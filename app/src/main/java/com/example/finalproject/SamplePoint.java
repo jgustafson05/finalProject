@@ -61,7 +61,7 @@ public class SamplePoint {
    * @throws IllegalStateException if this value is not categorical
    * @throws NullPointerException if this value has not been defined
    */
-  public int getCategory(int index) {
+  public int getCategory(int index) throws IllegalStateException, NullPointerException {
     try {
       if (!values.get(index).isCategorical()) {
         throw new IllegalStateException("The value is not categorical.");
@@ -79,7 +79,7 @@ public class SamplePoint {
    * @throws IllegalStateException if this value is not quantitative
    * @throws NullPointerException if this value has not been defined
    */
-  public double getMeasurement(int index) {
+  public double getMeasurement(int index) throws IllegalStateException, NullPointerException {
     try {
       if (values.get(index).isCategorical()) {
         throw new IllegalStateException("The value is not quantitative");
@@ -96,7 +96,7 @@ public class SamplePoint {
    * @param sampleCategory the category of the variable for this SamplePoint
    * @throws IndexOutOfBoundsException if no variable has been defined at this index
    */
-  public void setValue(int index, int sampleCategory) {
+  public void setValue(int index, int sampleCategory) throws IndexOutOfBoundsException {
     try {
       values.set(index, new Value(sampleCategory));
     } catch (IndexOutOfBoundsException e) {
@@ -110,11 +110,11 @@ public class SamplePoint {
    * @param sampleMeasurement the measurement of the variable for this SamplePoint
    * @throws IndexOutOfBoundsException if no variable has been defined at this index
    */
-  public void setValue(int index, double sampleMeasurement) {
+  public void setValue(int index, double sampleMeasurement) throws IndexOutOfBoundsException {
     try {
       values.set(index, new Value(sampleMeasurement));
     } catch (IndexOutOfBoundsException e) {
-      throw new IndexOutOfBoundsException("There is no variable at this index");
+      throw new IndexOutOfBoundsException("There is no variable for this index");
     }
   }
 

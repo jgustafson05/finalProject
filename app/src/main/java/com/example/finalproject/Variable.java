@@ -40,15 +40,20 @@ public class Variable implements Comparable<Variable> {
    * @return false if the list already contained this category
    * @throws NullPointerException if this variable is not categorical
    */
-  public boolean addCategory(String category) {
+  public boolean addCategory(String category) throws NullPointerException {
     if (!categorical) {
       throw new NullPointerException("A quantitative variable does not have categories.");
     }
-    if (categories.contains(category)) {
-      return false;
+    for (int i = 1; i < categories.size(); i++) {
+      if (category.compareTo(categories.get(i)) <= 0) {
+        if (category.compareTo(categories.get(i)) == 0)  {
+          return false;
+        }
+        categories.add(i, category);
+        return true;
+      }
     }
-    categories.add(category);
-    return true;
+    return categories.add(category);
   }
 
   /**
@@ -57,7 +62,7 @@ public class Variable implements Comparable<Variable> {
    * @return true if the list contained the category
    * @throws NullPointerException if this variable is not categorical
    */
-  public boolean removeCategory(String category) {
+  public boolean removeCategory(String category) throws NullPointerException {
     if (!categorical) {
       throw new NullPointerException("A quantitative variable does not have categories.");
     }
@@ -65,14 +70,29 @@ public class Variable implements Comparable<Variable> {
   }
 
   /**
-   * Returns the list of categories.
-   * @return the list of categories
+   * Moves category to front of the list as default and puts old default back in lexographic order.
+   * @param index index of the new default category
+   * @return true if the array is large enough to set a default
    * @throws NullPointerException if this variable is not categorical
+   * @throws IndexOutOfBoundsException if the index is out of range
    */
-  public List<String> getCategories() {
+  public boolean setDefaultCategory(int index)
+          throws NullPointerException, IndexOutOfBoundsException {
     if (!categorical) {
       throw new NullPointerException("A quantitative variable does not have categories.");
     }
+    if (categories.size() == 0 || categories.size() == 1) {
+      return false;
+    }
+    categories.add(0, categories.remove(index));
+    return true;
+  }
+
+  /**
+   * Returns the list of categories.
+   * @return the list of categories or null if it does not exist
+   */
+  public List<String> getCategories() {
     return categories;
   }
 

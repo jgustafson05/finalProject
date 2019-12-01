@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,7 +15,7 @@ public class FileWriter {
     try {
       file.createNewFile();
     } catch (Exception e) {
-      System.err.println(e.toString());
+      Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
       return false;
     }
 

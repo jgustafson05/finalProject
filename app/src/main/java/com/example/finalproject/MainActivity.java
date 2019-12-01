@@ -4,16 +4,34 @@ import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+  private List<Variable> variables;
+  private List<SamplePoint> samplePoints;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+
+    File variableFile = new File(getApplicationContext().getFilesDir(),
+            getIntent().getStringExtra("title"));
+
+    variables = FileReader.readVariables(this, variableFile);
+
+    if (variables == null || variables.isEmpty()) {
+      Toast.makeText(this, "problem reading the files", Toast.LENGTH_SHORT).show();
+    } else {
+      Toast.makeText(this, variables.get(0).getName(), Toast.LENGTH_SHORT).show();
+    }
   }
 
   @Override

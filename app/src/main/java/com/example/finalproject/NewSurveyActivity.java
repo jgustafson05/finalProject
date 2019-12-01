@@ -47,6 +47,7 @@ public class NewSurveyActivity extends AppCompatActivity {
         bundle.putString("title", surveyTitle);
         //Add to intent here
 
+        intent.putExtras(bundle);
         startActivity(intent);
         finish();
       }
@@ -75,30 +76,15 @@ public class NewSurveyActivity extends AppCompatActivity {
                 for (int i = 0; i < variables.size(); i++) {
                   if (variablePrompt.getText().toString().equals(variables.get(i).getName())) {
                     Toast sameName = Toast.makeText(getApplicationContext(),
-                            "\"" + variablePrompt.getText().toString()
-                                    + "\"" + " is already a variable name.",
+                            "'" + variablePrompt.getText().toString()
+                                    + "'" + " is already a variable name.",
                             Toast.LENGTH_LONG);
                     sameName.show();
                     return;
                   }
                 }
-
-                Variable toAdd = new Variable(variablePrompt.getText().toString(),
-                          variableTypeButton.isChecked());
-
-                boolean addedVariable = false;
-                //Places new variable in lexicographic order
-                for (int j = 0; j < variables.size(); j++) {
-                  if (toAdd.compareTo(variables.get(j)) > 0) {
-                    continue;
-                  }
-                  variables.add(j, toAdd);
-                  addedVariable = true;
-                  break;
-                }
-                if (!addedVariable) {
-                  variables.add(toAdd);
-                }
+                addVariable(new Variable(variablePrompt.getText().toString(),
+                        variableTypeButton.isChecked()));
 
                 //Add to the file
                 updateVariablesUI();
@@ -165,6 +151,31 @@ public class NewSurveyActivity extends AppCompatActivity {
       variablesList.addView(variableChunk);
     }
     variablesList.setVisibility(View.VISIBLE);
+  }
+
+  private boolean setResponseVariable(int index) {
+    if (variables.size() == 0 || variables.size() == 1) {
+      return false;
+    }
+    if (index < 0 || index >= variables.size()) {
+      return false;
+    }
+    variables.add(0, variables.remove(index));
+    return true;
+  }
+
+  private boolean addVariable(Variable variable) {
+    //Places new variable in lexicographic order
+    for (int j = 1; j < variables.size(); j++) {
+      if (variable.compareTo(variables.get(j)) <= 0) {
+        if (variable.compareTo(variables.get(j)) == 0) {
+          return false;
+        }
+        variables.add(j, variable);
+        return true;
+      }
+    }
+    return variables.add(variable);
   }
 
 }
