@@ -100,7 +100,7 @@ public class Variable implements Comparable<Variable> {
     return name;
   }
 
-  public void setName(String newName) {
+  public void setName(@NonNull String newName) {
     name = newName;
   }
 
@@ -110,6 +110,23 @@ public class Variable implements Comparable<Variable> {
 
   public void setCategorical(boolean isCategorical) {
     categorical = isCategorical;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 29;
+    int adjust = 8;
+    if (categorical) {
+      adjust = 0;
+    }
+    hash = 31 * hash + adjust;
+    hash = 31 * hash + (name == null ? 0 : name.hashCode());
+    if (categorical) {
+      for (String category : categories) {
+        hash = 31 * hash + category.hashCode();
+      }
+    }
+    return hash;
   }
 
 }

@@ -40,6 +40,11 @@ public class SamplePoint {
 
   private Map<Variable, Value> valueMap;
 
+  SamplePoint(@NonNull String pointName) {
+    name = pointName;
+    valueMap = new HashMap<>();
+  }
+
   SamplePoint(@NonNull String pointName, @NonNull Variable responseVariable,
               double responseMeasurement) {
     name = pointName;
