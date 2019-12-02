@@ -85,7 +85,13 @@ public class Variable implements Comparable<Variable> {
       return false;
     }
     categories.add(0, categories.remove(index));
-    return true;
+    for (int i = 2; i < categories.size(); i++) {
+      if (categories.get(1).compareTo(categories.get(i)) <= 0) {
+        categories.add(i, categories.remove(1));
+        return true;
+      }
+    }
+    return categories.add(categories.remove(1));
   }
 
   /**

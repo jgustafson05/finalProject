@@ -50,8 +50,8 @@ public class LaunchActivity extends AppCompatActivity {
                  File surveyFile = new File(getApplicationContext().getFilesDir(),
                            dialogPrompt.getText().toString());
                  if (!surveyFile.mkdir()
-                         || new File(surveyFile.getPath(), "variables").createNewFile()
-                         || new File(surveyFile.getPath(),"sample_points").createNewFile()
+                         || !new File(surveyFile.getPath(), "variables").createNewFile()
+                         || !new File(surveyFile.getPath(),"sample_points").createNewFile()
                  ) {
                    Toast.makeText(LaunchActivity.this,
                            "A survey by this name already exists", Toast.LENGTH_SHORT)
