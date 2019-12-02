@@ -1,7 +1,9 @@
 package com.example.finalproject;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.annotation.NonNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /** Represents a point from the sample.
  * does not check variables list for errors
@@ -26,10 +28,6 @@ public class SamplePoint {
       categorical = false;
     }
 
-    private boolean isCategorical() {
-      return categorical;
-    }
-
     private double getValue() {
       if (categorical) {
         return category;
@@ -40,51 +38,30 @@ public class SamplePoint {
 
   private String name;
 
-  private List<Value> values;
+  private Map<Variable, Value> valueMap;
 
-  SamplePoint(String pointName, int variableCount, double responseMeasurement) {
+  SamplePoint(@NonNull String pointName, @NonNull Variable responseVariable,
+              double responseMeasurement) {
     name = pointName;
-    values = new ArrayList<>(variableCount);
-    values.set(0, new Value(responseMeasurement));
+    valueMap = new HashMap<>();
+    valueMap.put(responseVariable, new Value(responseMeasurement));
   }
 
-  SamplePoint(String pointName, int variableCount, int responseCategory) {
+  SamplePoint(@NonNull String pointName, @NonNull Variable responseVariable, int responseCategory) {
     name = pointName;
-    values = new ArrayList<>(variableCount);
-    values.set(0, new Value(responseCategory));
+    valueMap = new HashMap<>();
+    valueMap.put(responseVariable, new Value(responseCategory));
   }
 
   /**
-   * Returns the number of the category at the given index.
-   * @param index index of the value to be found
-   * @return the number of the category at this index
-   * @throws IllegalStateException if this value is not categorical
-   * @throws NullPointerException if this value has not been defined
+   * Returns the category or measurement related to this variable for this SamplePoint.
+   * @param relatedVariable variable to search for
+   * @return the category or measurement of this variable
+   * @throws NullPointerException if the variable has not been defined for this SamplePoint
    */
-  public int getCategory(int index) throws IllegalStateException, NullPointerException {
+  public double getValue(Variable relatedVariable) throws NullPointerException {
     try {
-      if (!values.get(index).isCategorical()) {
-        throw new IllegalStateException("The value is not categorical.");
-      }
-      return (int) values.get(index).getValue();
-    } catch (NullPointerException e) {
-      throw new NullPointerException("This value has not been defined");
-    }
-  }
-
-  /**
-   * Returns the measured value at the given index.
-   * @param index index of the value to be found
-   * @return the measured value at this index
-   * @throws IllegalStateException if this value is not quantitative
-   * @throws NullPointerException if this value has not been defined
-   */
-  public double getMeasurement(int index) throws IllegalStateException, NullPointerException {
-    try {
-      if (values.get(index).isCategorical()) {
-        throw new IllegalStateException("The value is not quantitative");
-      }
-      return values.get(index).getValue();
+      return valueMap.get(relatedVariable).getValue();
     } catch (NullPointerException e) {
       throw new NullPointerException("This value has not been defined");
     }
@@ -92,42 +69,28 @@ public class SamplePoint {
 
   /**
    * Sets the value of a categorical variable for this SamplePoint.
-   * @param index index of the variable for this value
+   * @param relatedVariable the variable for which the value was found
    * @param sampleCategory the category of the variable for this SamplePoint
-   * @throws IndexOutOfBoundsException if no variable has been defined at this index
    */
-  public void setValue(int index, int sampleCategory) throws IndexOutOfBoundsException {
-    try {
-      values.set(index, new Value(sampleCategory));
-    } catch (IndexOutOfBoundsException e) {
-      throw new IndexOutOfBoundsException("There is no variable for this index");
-    }
+  public void setValue(Variable relatedVariable, int sampleCategory) {
+    valueMap.put(relatedVariable, new Value(sampleCategory));
   }
 
   /**
    * Sets the value of a quantitative variable for this SamplePoint.
-   * @param index index of the variable for this value
+   * @param relatedVariable the variable for which the value was found
    * @param sampleMeasurement the measurement of the variable for this SamplePoint
-   * @throws IndexOutOfBoundsException if no variable has been defined at this index
    */
-  public void setValue(int index, double sampleMeasurement) throws IndexOutOfBoundsException {
-    try {
-      values.set(index, new Value(sampleMeasurement));
-    } catch (IndexOutOfBoundsException e) {
-      throw new IndexOutOfBoundsException("There is no variable for this index");
-    }
+  public void setValue(Variable relatedVariable, double sampleMeasurement) {
+    valueMap.put(relatedVariable, new Value(sampleMeasurement));
   }
 
-  public void addVariable(int index) {
-    values.add(index, null);
+  public void removeVariable(Variable toRemove) {
+    valueMap.remove(toRemove);
   }
 
-  public void removeVariable(int index) {
-    values.remove(index);
-  }
-
-  public boolean valueIsSet(int index) {
-    return (values.get(index) != null);
+  public boolean valueIsSet(Variable relatedVariable) {
+    return (valueMap.get(relatedVariable) != null);
   }
 
   public String getName() {
@@ -137,5 +100,4 @@ public class SamplePoint {
   public void setName(String newName) {
     name = newName;
   }
-
 }
