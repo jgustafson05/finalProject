@@ -55,8 +55,9 @@ public class FileWriter {
     return true;
   }
 
-  public static boolean writeSamplePoints(Context context, File file, List<Variable> variables,
-                                          List<SamplePoint> samplePoints) {
+  public static boolean writeFile(Context context, File file, List<Variable> variables,
+                                  @Nullable List<SamplePoint> samplePoints) {
+
     file.delete();
     try {
       file.createNewFile();
@@ -66,27 +67,44 @@ public class FileWriter {
     }
 
     StringBuilder fileContentsBuilder = new StringBuilder();
-
-    //Add ordered hash of variables for reference
     for (int i = 0; i < variables.size(); i++) {
-      fileContentsBuilder.append(variables.get(i).hashCode()).append(":");
-    }
-    fileContentsBuilder.deleteCharAt(fileContentsBuilder.length() - 1).append("\n");
-
-    //Table of values with variables as columns
-    for (int i = 0; i < samplePoints.size(); i++) {
-      StringBuilder newLine = new StringBuilder(samplePoints.get(i).getName()).append(":");
-      for (int j = 0; j < variables.size(); j++) {
-        try {
-          newLine.append(samplePoints.get(i).getValue(variables.get(j)));
-        } catch (NullPointerException e) {
-          newLine.append("n");
-        } finally {
-          newLine.append(":");
+      String typeString = "f";
+      String categoriesString = "null";
+      if (variables.get(i).isCategorical()) {
+        typeString = "t";
+        List<String> categories = variables.get(i).getCategories();
+        if (!categories.isEmpty()) {
+          StringBuilder categoriesStringBuilder = new StringBuilder();
+          for (int j = 0; j < categories.size(); j++) {
+            categoriesStringBuilder.append(categories.get(j));
+            if (j != categories.size() - 1) {
+              categoriesStringBuilder.append(",");
+            }
+          }
+          categoriesString = categoriesStringBuilder.toString();
         }
       }
-      newLine.deleteCharAt(newLine.length() - 1).append("\n");
+      String newLine = variables.get(i).getName() + ":"
+              + typeString + ":"
+              + categoriesString + "\n";
       fileContentsBuilder.append(newLine);
+      fileContentsBuilder.append(";");
+    }
+    if (samplePoints != null) {
+      for (int i = 0; i < samplePoints.size(); i++) {
+        StringBuilder newLine = new StringBuilder(samplePoints.get(i).getName()).append(":");
+        for (int j = 0; j < variables.size(); j++) {
+          try {
+            newLine.append(samplePoints.get(i).getValue(variables.get(j)));
+          } catch (NullPointerException e) {
+            newLine.append("n");
+          } finally {
+            newLine.append(":");
+          }
+        }
+        newLine.deleteCharAt(newLine.length() - 1).append("\n");
+        fileContentsBuilder.append(newLine);
+      }
     }
     String fileContents = fileContentsBuilder.toString();
 
@@ -98,4 +116,5 @@ public class FileWriter {
     }
     return true;
   }
+
 }
