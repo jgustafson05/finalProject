@@ -161,7 +161,7 @@ public class NewSurveyActivity extends AppCompatActivity {
       return false;
     }
     variables.add(0, variables.remove(index));
-    return true;
+    return addVariable(variables.remove(1));
   }
 
   private boolean addVariable(Variable variable) {

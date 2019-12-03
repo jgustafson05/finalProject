@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">finalProject</string>
+    <string name="app_name">Easy Surveys</string>
     <string name="new_file_button">Create New File</string>
     <string name="load_file_button">Load From File</string>
     <string name="dialog_new_file_title">Survey Title</string>
@@ -9,11 +9,13 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_new_file_hint">Title</string>
     <string name="dialog_new_variable_hint">Name</string>
+    <string name="daialog_rename_button">Rename</string>
+    <string name="menu_rename">Rename file</string>
+    <string name="menu_delete">Delete file</string>
     <string name="variables_title">Variables</string>
-    <string name="variable_type_categorical">Categorical Variable</string>
-    <string name="variable_type_quantitative">Quantitative Variable</string>
-    <string name="new_variable">Add Variable</string>
-    <string name="use_labels">Labeled Entries</string>
+    <string name="variable_type_categorical">Categorical variable</string>
+    <string name="variable_type_quantitative">Quantitative variable</string>
+    <string name="new_variable">Add variable</string>
     <string name="new_survey">Create Survey</string>
     <string name="remove_variable">Remove</string>
     <string-array name="variable_types">
