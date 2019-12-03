@@ -28,8 +28,9 @@ public class FileReader {
         String contents = stringBuilder.toString();
         List<Variable> toReturn = new ArrayList<>();
 
-        String[] lines = contents.split("\n");
-        for (String l : lines) {
+        String[] dataSplit = contents.split(";");
+        String[] variableLines = contents.split("\n");
+        for (String l : variableLines) {
           String[] parts = l.split(":");
           toReturn.add(toReturn.size(), new Variable(parts[0], parts[1].equals("t")));
           if (!parts[2].equals("null")) {
@@ -50,8 +51,7 @@ public class FileReader {
     }
   }
 
-  public static List<SamplePoint> readSamplePoints(Context context, File file,
-                                                   List<Variable> variables) {
+  public static List<SamplePoint> readSamplePoints(Context context, File file) {
     try {
       FileInputStream fis = context.openFileInput(file.getName());
       InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
@@ -63,22 +63,24 @@ public class FileReader {
           line = reader.readLine();
         }
         String contents = stringBuilder.toString();
-        List<SamplePoint> toReturn = new ArrayList<>();
 
-        String[] lines = contents.split("\n");
+        List<Variable> matchedList = new ArrayList<>();
 
-        //Find hash matches for variables
-        String[] key = lines[0].split(":");
-        List<Variable> matchedList = new ArrayList<>(key.length);
-        for (int i = 0; i < key.length; i++) {
-          int toMatch = Integer.parseInt(key[i]);
-          for (int j = 0; j < variables.size(); j++) {
-            if (variables.get(j).hashCode() == toMatch) {
-              matchedList.add(i, variables.remove(j));
-              break;
+        String[] dataSplit = contents.split(";");
+        String[] variableLines = dataSplit[0].split("\n");
+        for (String l : variableLines) {
+          String[] parts = l.split(":");
+          matchedList.add(matchedList.size(), new Variable(parts[0], parts[1].equals("t")));
+          if (!parts[2].equals("null")) {
+            String[] categories = parts[2].split(",");
+            for (String c : categories) {
+              matchedList.get(matchedList.size() - 1).addCategory(c);
             }
           }
         }
+        List<SamplePoint> toReturn = new ArrayList<>();
+
+        String[] lines = dataSplit[1].split("\n");
 
         for (int i = 1; i < lines.length; i++) {
           String[] dataPoints = lines[i].split(":");
