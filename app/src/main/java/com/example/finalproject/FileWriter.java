@@ -11,10 +11,8 @@ import java.util.List;
 
 public class FileWriter {
 
-  public static boolean writeVariables(Context context, File directory, List<Variable> variables) {
-    File file = new File(directory, "variables");
+  public static boolean writeVariables(Context context, File file, List<Variable> variables) {
 
-    String filename = file.getName();
     file.delete();
     try {
       file.createNewFile();
@@ -48,7 +46,7 @@ public class FileWriter {
     }
     String fileContents = fileContentsBuilder.toString();
 
-    try (FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE)) {
+    try (FileOutputStream fos = context.openFileOutput(file.getName(), Context.MODE_PRIVATE)) {
       fos.write(fileContents.getBytes());
     } catch (Exception e) {
       System.err.println(e.toString());
@@ -57,10 +55,8 @@ public class FileWriter {
     return true;
   }
 
-  public static boolean writeSamplePoints(Context context, File directory, List<Variable> variables,
+  public static boolean writeSamplePoints(Context context, File file, List<Variable> variables,
                                           List<SamplePoint> samplePoints) {
-    File file = new File(directory, "sample_points");
-    String filename = file.getName();
     file.delete();
     try {
       file.createNewFile();
@@ -94,7 +90,7 @@ public class FileWriter {
     }
     String fileContents = fileContentsBuilder.toString();
 
-    try (FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE)) {
+    try (FileOutputStream fos = context.openFileOutput(file.getName(), Context.MODE_PRIVATE)) {
       fos.write(fileContents.getBytes());
     } catch (Exception e) {
       System.err.println(e.toString());

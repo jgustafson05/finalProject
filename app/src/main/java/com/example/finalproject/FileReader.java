@@ -14,8 +14,7 @@ import java.util.List;
 
 public class FileReader {
 
-  public static List<Variable> readVariables(Context context, File directory) {
-    File file = new File(directory, "variables");
+  public static List<Variable> readVariables(Context context, File file) {
     try {
       FileInputStream fis = context.openFileInput(file.getName());
       InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
@@ -51,9 +50,8 @@ public class FileReader {
     }
   }
 
-  public static List<SamplePoint> readSamplePoints(Context context, File directory,
+  public static List<SamplePoint> readSamplePoints(Context context, File file,
                                                    List<Variable> variables) {
-    File file = new File(directory, "sample_points");
     try {
       FileInputStream fis = context.openFileInput(file.getName());
       InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);

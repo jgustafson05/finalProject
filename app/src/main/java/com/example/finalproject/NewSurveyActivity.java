@@ -40,16 +40,24 @@ public class NewSurveyActivity extends AppCompatActivity {
     newVariable.setOnClickListener(unused -> createNewVariableDialog());
     createSurvey.setOnClickListener(unused -> {
       //Add an 'are you sure' here?
-      if (FileWriter.writeVariables(this, surveyFile, variables)) {
+      try {
+        if (surveyFile.mkdirs()
+                && new File(surveyFile.getPath(), "variables").createNewFile()
+                && new File(surveyFile.getPath(), "sample_points").createNewFile()
+                && FileWriter.writeVariables(this, surveyFile, variables)
+        ) {
+          Intent intent = new Intent(this, MainActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("title", surveyTitle);
+          //Add to intent here
 
-        Intent intent = new Intent(this, MainActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("title", surveyTitle);
-        //Add to intent here
-
-        intent.putExtras(bundle);
-        startActivity(intent);
-        finish();
+          intent.putExtras(bundle);
+          startActivity(intent);
+          finish();
+        }
+        surveyFile.delete();
+      } catch (Exception e) {
+        Toast.makeText(this, "Not enough space", Toast.LENGTH_SHORT).show();
       }
     });
   }

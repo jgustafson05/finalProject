@@ -50,22 +50,13 @@ public class LaunchActivity extends AppCompatActivity {
                  //Alert user somehow
                  return;
                }
-               try {
-                 File surveyFile = new File(getApplicationContext().getFilesDir(),
+               File surveyFile = new File(getApplicationContext().getFilesDir(),
                            dialogPrompt.getText().toString());
-                 if (!surveyFile.mkdir()
-                         || !new File(surveyFile.getPath(), "variables").createNewFile()
-                         || !new File(surveyFile.getPath(),"sample_points").createNewFile()
-                 ) {
-                   Toast.makeText(LaunchActivity.this,
-                           "A survey with this name already exists", Toast.LENGTH_SHORT)
-                           .show();
-                   return;
-                 }
-               } catch (IOException e) {
-                 Toast ioProblem = Toast.makeText(getApplicationContext(),
-                         "Error: not enough space to make a file", Toast.LENGTH_LONG);
-                 ioProblem.show();
+               if (surveyFile.exists()) {
+                 Toast.makeText(LaunchActivity.this,
+                         "A survey with this name already exists", Toast.LENGTH_SHORT).show();
+                 createNewFileDialog();
+                 return;
                }
                Intent intent = new Intent(getApplicationContext(), NewSurveyActivity.class);
                Bundle bundle = new Bundle();
@@ -98,6 +89,21 @@ public class LaunchActivity extends AppCompatActivity {
         TextView fileName = fileChunk.findViewById(R.id.fileName);
         fileName.setText(fileArray[i].getName());
         //ADD SOME FUNCTIONALITY
+
+        fileName.setOnClickListener(unused -> {
+          //Add some make sures here in the future.
+          Intent intent = new Intent(this, MainActivity.class);
+          Bundle bundle = new Bundle();
+
+          bundle.putString("title", fileName.getText().toString());
+          bundle.putBoolean("hasSamplePoints", true);
+
+          intent.putExtras(bundle);
+          startActivity(intent);
+          finish();
+        });
+
+
         registerForContextMenu(fileName);
 
         fileContainer.addView(fileChunk);
@@ -126,6 +132,7 @@ public class LaunchActivity extends AppCompatActivity {
   public boolean onContextItemSelected(MenuItem item) {
     AdapterView.AdapterContextMenuInfo info =
             (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    Toast.makeText(this, item.getItemId(), Toast.LENGTH_SHORT).show();
     switch (item.getItemId()) {
       case R.id.renameFile:
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -159,7 +166,12 @@ public class LaunchActivity extends AppCompatActivity {
           });
         builder.show();
       case R.id.deleteFile:
-
+        TextView chosenText = info.targetView.findViewById(R.id.fileName);
+        File toDestroy = new File(getApplicationContext().getFilesDir(),
+                chosenText.getText().toString());
+        if (toDestroy.delete()) {
+          Toast.makeText(this, "yeet", Toast.LENGTH_SHORT).show();
+        }
         return true;
       default:
         return super.onContextItemSelected(item);
