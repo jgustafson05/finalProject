@@ -18,7 +18,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
-import java.io.IOException;
 
 /** Requires and completes creation or loading of a new file. */
 public class LaunchActivity extends AppCompatActivity {

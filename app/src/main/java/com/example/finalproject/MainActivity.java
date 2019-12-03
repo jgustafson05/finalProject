@@ -22,16 +22,16 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
 
-    File variableFile = new File(getApplicationContext().getFilesDir(),
+    File file = new File(getApplicationContext().getFilesDir(),
             getIntent().getStringExtra("title"));
 
-    variables = FileReader.readVariables(getApplicationContext(), variableFile);
+    variables = FileReader.readVariables(getApplicationContext(), file);
+    samplePoints = FileReader.readSamplePoints(getApplicationContext(), file);
 
-    if (variables == null || variables.isEmpty()) {
-      Toast.makeText(this, "problem reading the files", Toast.LENGTH_SHORT).show();
-    } else {
-      Toast.makeText(this, variables.get(0).getName(), Toast.LENGTH_SHORT).show();
+    if (samplePoints == null) {
+      Toast.makeText(this, "samplePoint error", Toast.LENGTH_SHORT).show();
     }
+
   }
 
   @Override

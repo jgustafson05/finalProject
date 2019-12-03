@@ -67,6 +67,9 @@ public class FileReader {
         List<Variable> matchedList = new ArrayList<>();
 
         String[] dataSplit = contents.split(";");
+        if (dataSplit.length == 1) {
+          return new ArrayList<>();
+        }
         String[] variableLines = dataSplit[0].split("\n");
         for (String l : variableLines) {
           String[] parts = l.split(":");
