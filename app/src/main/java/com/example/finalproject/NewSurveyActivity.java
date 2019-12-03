@@ -41,9 +41,7 @@ public class NewSurveyActivity extends AppCompatActivity {
     createSurvey.setOnClickListener(unused -> {
       //Add an 'are you sure' here?
       try {
-        if (surveyFile.mkdirs()
-                && new File(surveyFile.getPath(), "variables").createNewFile()
-                && new File(surveyFile.getPath(), "sample_points").createNewFile()
+        if (surveyFile.createNewFile()
                 && FileWriter.writeVariables(this, surveyFile, variables)
         ) {
           Intent intent = new Intent(this, MainActivity.class);
@@ -55,7 +53,6 @@ public class NewSurveyActivity extends AppCompatActivity {
           startActivity(intent);
           finish();
         }
-        surveyFile.delete();
       } catch (Exception e) {
         Toast.makeText(this, "Not enough space", Toast.LENGTH_SHORT).show();
       }

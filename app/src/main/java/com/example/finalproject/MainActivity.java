@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     File variableFile = new File(getApplicationContext().getFilesDir(),
             getIntent().getStringExtra("title"));
 
-    variables = FileReader.readVariables(this, variableFile);
+    variables = FileReader.readVariables(getApplicationContext(), variableFile);
 
     if (variables == null || variables.isEmpty()) {
       Toast.makeText(this, "problem reading the files", Toast.LENGTH_SHORT).show();
