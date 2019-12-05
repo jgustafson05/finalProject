@@ -29,7 +29,7 @@ public class FileReader {
         List<Variable> toReturn = new ArrayList<>();
 
         String[] dataSplit = contents.split(";");
-        String[] variableLines = contents.split("\n");
+        String[] variableLines = dataSplit[0].split("\n");
         for (String l : variableLines) {
           String[] parts = l.split(":");
           toReturn.add(toReturn.size(), new Variable(parts[0], parts[1].equals("t")));
