@@ -3,12 +3,14 @@ package com.example.finalproject;
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /** Represents a point from the sample.
  * does not check variables list for errors
  * must be updated when variables are added or removed */
-public class SamplePoint {
+public class SamplePoint implements Comparable<SamplePoint> {
 
   protected class Value {
 
@@ -88,6 +90,9 @@ public class SamplePoint {
    */
   public void setValue(Variable relatedVariable, double sampleMeasurement) {
     valueMap.put(relatedVariable, new Value(sampleMeasurement));
+  }
+  public int compareTo(@NonNull SamplePoint point) {
+    return name.compareTo(point.getName());
   }
 
   public void removeVariable(Variable toRemove) {

@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
     variables = FileReader.readVariables(getApplicationContext(), file);
     orderedSamplePoints = FileReader.readSamplePoints(getApplicationContext(), file);
+
+    if (orderedSamplePoints != null) {
+      alphabeticSamplePoints = ListSorter.mergeSort(orderedSamplePoints);
+    }
   }
 
   private boolean addSamplePoint(@NonNull String name) {
