@@ -1,12 +1,16 @@
 package com.example.finalproject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
 /** Represents a variable used in the survey. */
-public class Variable implements Comparable<Variable> {
+public class Variable implements Comparable<Variable>, Parcelable {
 
   /** Name of the variable. */
   private String name;
@@ -16,6 +20,28 @@ public class Variable implements Comparable<Variable> {
 
   /** The list of categories for a categorical variable. */
   private ArrayList<String> categories;
+
+  public static final Parcelable.Creator<Variable> CREATOR
+      = new Parcelable.Creator<Variable>() {
+
+        public Variable createFromParcel(Parcel in) {
+          try {
+            Variable created = new Variable(in.readString(), in.readInt() == 1);
+            if (created.isCategorical()) {
+              for (String s : in.createStringArray()) {
+                created.addCategory(s);
+              }
+            }
+            return created;
+          } catch (NullPointerException e) {
+            throw new InvalidParameterException();
+          }
+        }
+
+        public Variable[] newArray(int size) {
+          return new Variable[size];
+        }
+      };
 
   /**
    * Creates a new variable for the survey.
@@ -116,6 +142,18 @@ public class Variable implements Comparable<Variable> {
 
   public void setCategorical(boolean isCategorical) {
     categorical = isCategorical;
+  }
+
+  public void writeToParcel(Parcel out, int flags) {
+    out.writeString(name);
+    out.writeInt(isCategorical() ? 1 : 0);
+    if (isCategorical()) {
+      out.writeStringList(getCategories());
+    }
+  }
+
+  public int describeContents() {
+    return 0;
   }
 
   @Override

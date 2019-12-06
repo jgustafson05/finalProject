@@ -1,16 +1,22 @@
 package com.example.finalproject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /** Represents a point from the sample.
  * does not check variables list for errors
  * must be updated when variables are added or removed */
-public class SamplePoint implements Comparable<SamplePoint> {
+public class SamplePoint implements Comparable<SamplePoint>, Parcelable {
 
   protected class Value {
 
@@ -37,6 +43,32 @@ public class SamplePoint implements Comparable<SamplePoint> {
       return measurement;
     }
   }
+
+  public static final Parcelable.Creator<SamplePoint> CREATOR
+          = new Parcelable.Creator<SamplePoint>() {
+            public SamplePoint createFromParcel(Parcel in) {
+              try {
+                SamplePoint point = new SamplePoint(in.readString());
+                Parcelable[] variables = in.readParcelableArray(getClass().getClassLoader());
+                double[] doubles = in.createDoubleArray();
+                for (int i = 0; i < variables.length; i++) {
+                  Variable v = (Variable) variables[i];
+                  if (v.isCategorical()) {
+                    point.setValue(v, doubles[i]);
+                  } else {
+                    point.setValue(v, (int) doubles[i]);
+                  }
+                }
+                return point;
+              } catch (NullPointerException e) {
+                throw new InvalidParameterException();
+              }
+            }
+
+            public SamplePoint[] newArray(int size) {
+              return new SamplePoint[size];
+            }
+          };
 
   private String name;
 
@@ -91,8 +123,32 @@ public class SamplePoint implements Comparable<SamplePoint> {
   public void setValue(Variable relatedVariable, double sampleMeasurement) {
     valueMap.put(relatedVariable, new Value(sampleMeasurement));
   }
+
   public int compareTo(@NonNull SamplePoint point) {
     return name.compareTo(point.getName());
+  }
+
+  public int describeContents() {
+    return 0;
+  }
+
+  public void writeToParcel(Parcel out, int flags) {
+    out.writeString(name);
+    Set<Map.Entry<Variable, Value>> entries = valueMap.entrySet();
+    List<Variable> variables = new ArrayList<>();
+    List<Value> values = new ArrayList<>();
+    for (Map.Entry<Variable, Value> entry : entries) {
+      variables.add(entry.getKey());
+      values.add(entry.getValue());
+    }
+    double[] doubles = new double[values.size()];
+    Variable[] varArray = new Variable[variables.size()];
+    for (int i = 0; i < values.size(); i++) {
+      doubles[i] = values.get(i).getValue();
+      varArray[i] = variables.get(i);
+    }
+    out.writeParcelableArray(varArray, 0);
+    out.writeDoubleArray(doubles);
   }
 
   public void removeVariable(Variable toRemove) {
