@@ -48,10 +48,10 @@ public class SampleItemFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-      point = getArguments().getParcelable("point");
-      variables = (Variable[]) getArguments().getParcelableArray("variables");
-    }
+    //if (getArguments() != null) {
+      //point = getArguments().getParcelable("point");
+      //variables = (Variable[]) getArguments().getParcelableArray("variables");
+    //}
   }
 
   @Override
@@ -83,6 +83,10 @@ public class SampleItemFragment extends Fragment {
   public void onDetach() {
     super.onDetach();
     mListener = null;
+  }
+
+  public void setOnFragmentInteractionListener(OnFragmentInteractionListener callback) {
+    mListener = callback;
   }
 
   /**

@@ -1,21 +1,23 @@
 package com.example.finalproject;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
+
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SampleItemFragment.OnFragmentInteractionListener {
 
   private List<Variable> variables;
   private List<SamplePoint> orderedSamplePoints;
@@ -36,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     if (orderedSamplePoints != null) {
       alphabeticSamplePoints = ListSorter.mergeSort(orderedSamplePoints);
     }
+    addSamplePoint("Test_Point");
+    Button test = findViewById(R.id.launchFragment);
+    test.setOnClickListener(unused ->
+            openSamplePointFragment(orderedSamplePoints.get(orderedSamplePoints.size() - 1)));
   }
 
   private boolean addSamplePoint(@NonNull String name) {
@@ -62,6 +68,40 @@ public class MainActivity extends AppCompatActivity {
 
   private void removePointByOrder(int orderedIndex) {
     alphabeticSamplePoints.remove(orderedSamplePoints.remove(orderedIndex));
+  }
+
+  private void openSamplePointFragment(SamplePoint point) {
+    Variable[] variableArray = new Variable[variables.size()];
+    for (int i = 0; i < variables.size(); i++) {
+      variableArray[i] = variables.get(i);
+    }
+    try {
+      Fragment pointView = SampleItemFragment.newInstance(variableArray, point);
+      FrameLayout fragmentHolder = findViewById(R.id.fragmentHolder);
+
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      transaction.replace(R.id.fragmentHolder, pointView);
+      transaction.addToBackStack(null);
+
+      transaction.commit();
+
+      //pointView.startActivityForResult(new Intent(this, SampleItemFragment.class), 0);
+    } catch (Exception e) {
+      Log.e("fragment", "caught at main activity" + e.toString());
+    }
+
+
+  }
+
+  public void onAttachFragment(Fragment fragment) {
+    if (fragment instanceof SampleItemFragment) {
+      SampleItemFragment item = (SampleItemFragment) fragment;
+      item.setOnFragmentInteractionListener(this);
+    }
+  }
+
+
+  public void onFragmentInteraction(Uri uri) {
   }
 
   /*@Override
