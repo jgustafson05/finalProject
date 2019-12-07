@@ -76,6 +76,7 @@ public class LaunchActivity extends AppCompatActivity {
   }
 
   private void createLoadFileDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
     File[] fileArray = getApplicationContext().getFilesDir().listFiles();
     View view = getLayoutInflater().inflate(R.layout.dialog_load_file, null);
     LinearLayout fileContainer = view.findViewById(R.id.fileContainer);
@@ -102,6 +103,19 @@ public class LaunchActivity extends AppCompatActivity {
           finish();
         });
 
+        fileName.setOnLongClickListener(unused -> {
+          // TODO: Make this open a rename file dialog.
+          return true;
+        });
+
+        Button delete = fileChunk.findViewById(R.id.delete);
+
+        final File toDelete = fileArray[i];
+        delete.setOnClickListener(unused ->  {
+          if (toDelete.delete()) {
+            Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
+          }
+        });
 
         registerForContextMenu(fileName);
 
@@ -109,7 +123,7 @@ public class LaunchActivity extends AppCompatActivity {
       }
     }
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
     builder.setView(view);
     builder.setTitle(R.string.dialog_load_file_title)
             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

@@ -21,11 +21,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class SampleItemFragment extends Fragment {
-  // TODO: Rename parameter arguments, choose names that match
-  // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
   private static final String ARG_SAMPLE_POINT = "sample_point";
 
-  // TODO: Rename and change types of parameters
   private SamplePoint point;
   private Variable[] variables;
 
@@ -35,7 +32,6 @@ public class SampleItemFragment extends Fragment {
     // Required empty public constructor
   }
 
-  // TODO: Rename and change types and number of parameters
   public static SampleItemFragment newInstance(Variable[] variableArray, SamplePoint samplePoint) {
     SampleItemFragment fragment = new SampleItemFragment();
     Bundle args = new Bundle();
@@ -48,10 +44,10 @@ public class SampleItemFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    //if (getArguments() != null) {
-      //point = getArguments().getParcelable("point");
-      //variables = (Variable[]) getArguments().getParcelableArray("variables");
-    //}
+    if (getArguments() != null) {
+      point = getArguments().getParcelable("point");
+      variables = (Variable[]) getArguments().getParcelableArray("variables");
+    }
   }
 
   @Override
@@ -61,7 +57,6 @@ public class SampleItemFragment extends Fragment {
     return inflater.inflate(R.layout.fragment_sample_item, container, false);
   }
 
-  // TODO: Rename method, update argument and hook method into UI event
   public void onButtonPressed(Uri uri) {
     if (mListener != null) {
       mListener.onFragmentInteraction(uri);
@@ -89,16 +84,6 @@ public class SampleItemFragment extends Fragment {
     mListener = callback;
   }
 
-  /**
-   * This interface must be implemented by activities that contain this
-   * fragment to allow an interaction in this fragment to be communicated
-   * to the activity and potentially other fragments contained in that
-   * activity.
-   * <p>
-   * See the Android Training lesson <a href=
-   * "http://developer.android.com/training/basics/fragments/communicating.html"
-   * >Communicating with Other Fragments</a> for more information.
-   */
   public interface OnFragmentInteractionListener {
     // TODO: Update argument type and name
     void onFragmentInteraction(Uri uri);

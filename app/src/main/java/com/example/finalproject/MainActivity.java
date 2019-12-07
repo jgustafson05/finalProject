@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
       setTitle(point.getName());
 
       Button test = findViewById(R.id.launchFragment);
-      test.setVisibility(View.GONE);
     } catch (Exception e) {
       Log.e("fragment", "caught at main activity" + e.toString());
     }
