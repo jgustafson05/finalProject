@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -84,8 +85,10 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
       transaction.addToBackStack(null);
 
       transaction.commit();
+      setTitle(point.getName());
 
-      //pointView.startActivityForResult(new Intent(this, SampleItemFragment.class), 0);
+      Button test = findViewById(R.id.launchFragment);
+      test.setVisibility(View.GONE);
     } catch (Exception e) {
       Log.e("fragment", "caught at main activity" + e.toString());
     }
