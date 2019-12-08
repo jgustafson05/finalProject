@@ -88,8 +88,8 @@ public class FileWriter {
               + typeString + ":"
               + categoriesString + "\n";
       fileContentsBuilder.append(newLine);
-      fileContentsBuilder.append(";");
     }
+    fileContentsBuilder.append(";");
     if (samplePoints != null) {
       for (int i = 0; i < samplePoints.size(); i++) {
         StringBuilder newLine = new StringBuilder(samplePoints.get(i).getName()).append(":");

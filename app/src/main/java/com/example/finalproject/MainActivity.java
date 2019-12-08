@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity
     Log.println(Log.ERROR, "error", getIntent().getStringExtra("title"));
     variables = FileReader.readVariables(getApplicationContext(), file);
     orderedSamplePoints = FileReader.readSamplePoints(getApplicationContext(), file);
+    for (Variable v : variables) {
+      Log.e("eee", v.getName());
+    }
 
     Log.println(Log.ERROR, "error", orderedSamplePoints.toString());
     if (orderedSamplePoints != null) {
@@ -77,6 +80,10 @@ public class MainActivity extends AppCompatActivity
       //Set name
       TextView samplePointName = sampleChunk.findViewById(R.id.pointName);
       samplePointName.setText(orderedSamplePoints.get(i).getName());
+
+      final int index = i;
+      samplePointName.setOnClickListener(unused ->
+              openSamplePointFragment(orderedSamplePoints.get(index)));
 
       //Setup remove button
       final int toRemove = i;
@@ -108,11 +115,15 @@ public class MainActivity extends AppCompatActivity
       samplePointName.setText(alphabeticSamplePoints.get(i).getName());
       samplePointName.setTextColor(Color.BLUE);
 
+
+      final int index = i;
+      samplePointName.setOnClickListener(unused ->
+              openSamplePointFragment(alphabeticSamplePoints.get(index)));
+
       //Setup remove button
-      final int toRemove = i;
       Button removeSamplePoint = sampleChunk.findViewById(R.id.removePoint);
       removeSamplePoint.setOnClickListener(unused -> {
-        removePointAlphabetically(toRemove);
+        removePointAlphabetically(index);
         updateAlphaList();
         updateRecentList();
       });
@@ -195,7 +206,6 @@ public class MainActivity extends AppCompatActivity
     }
     try {
       Fragment pointView = SampleItemFragment.newInstance(variableArray, point, point.hashCode());
-      FrameLayout fragmentHolder = findViewById(R.id.fragmentHolder);
 
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
       transaction.replace(R.id.fragmentHolder, pointView);
