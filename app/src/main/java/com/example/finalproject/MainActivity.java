@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.println(Log.ERROR, "error", "made to main activity");
     setContentView(R.layout.activity_main);
 
 
@@ -58,9 +57,8 @@ public class MainActivity extends AppCompatActivity
     updateRecentList();
     updateAlphaList();
 
-    addSamplePoint("Test_Point");
     Button test = findViewById(R.id.addSamplePoint);
-    test.setOnClickListener(unused -> addSamplePoint("New_Point"));
+    test.setOnClickListener(unused -> createNewSamplePointDialog());
   }
 
   private void updateRecentList() {
@@ -126,9 +124,6 @@ public class MainActivity extends AppCompatActivity
   private void addSamplePoint(@NonNull String name) {
     SamplePoint point = new SamplePoint(name);
     for (int i = 0; i < alphabeticSamplePoints.size(); i++) {
-      Log.e("a", alphabeticSamplePoints.get(i).getName());
-    }
-    for (int i = 0; i < alphabeticSamplePoints.size(); i++) {
       if (name.compareTo(alphabeticSamplePoints.get(i).getName()) <= 0) {
         if (name.compareTo(alphabeticSamplePoints.get(i).getName()) == 0) {
           return;
@@ -150,37 +145,31 @@ public class MainActivity extends AppCompatActivity
 
   private void createNewSamplePointDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setView(R.layout.dialog_new_variable);
+    View view = getLayoutInflater().inflate(R.layout.dialog_new_file, null);
+    TextView prompt = view.findViewById(R.id.filePrompt);
+    prompt.setHint("Item name");
+    builder.setView(view);
 
     // Making a dialog to request title for survey
-    builder.setTitle(R.string.dialog_new_variable_title)
+    builder.setTitle("New Sample Item")
             .setPositiveButton(R.string.dialog_create, new DialogInterface.OnClickListener() {
               @Override
               public void onClick(final DialogInterface dialog, final int which) {
                 Dialog dialogView = (Dialog) dialog;
-
-                TextView variablePrompt = dialogView.findViewById(R.id.variablePrompt);
-                ToggleButton variableTypeButton = dialogView.findViewById(R.id.variableTypeButton);
-
-                if (variablePrompt.getText().toString().equals("")) {
+                TextView dialogPrompt = dialogView.findViewById(R.id.filePrompt);
+                if (dialogPrompt.getText().toString().equals("")) {
                   //Alert user somehow
                   return;
                 }
-
-                for (int i = 0; i < variables.size(); i++) {
-                  if (variablePrompt.getText().toString().equals(variables.get(i).getName())) {
-                    Toast sameName = Toast.makeText(getApplicationContext(),
-                            "'" + variablePrompt.getText().toString()
-                                    + "'" + " is already a variable name.",
-                            Toast.LENGTH_LONG);
-                    sameName.show();
+                String pointName = dialogPrompt.getText().toString();
+                for (int i = 0; i < alphabeticSamplePoints.size(); i++) {
+                  if (alphabeticSamplePoints.get(i).getName().equals(pointName)) {
+                    Toast.makeText(getApplicationContext(),
+                            "An item with this name already exists", Toast.LENGTH_SHORT).show();
                     return;
                   }
                 }
-                addSamplePoint(variablePrompt.getText().toString());
-
-                updateAlphaList();
-                updateRecentList();
+                addSamplePoint(pointName);
               }
             })
             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
