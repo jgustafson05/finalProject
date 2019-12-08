@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
     alphaList.removeAllViews();
 
     updateRecentList();
+    //updateAlphaList() crashes app
     updateAlphaList();
     addSamplePoint("Test_Point");
     Button test = findViewById(R.id.launchFragment);
