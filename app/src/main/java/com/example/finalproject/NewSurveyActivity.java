@@ -40,6 +40,11 @@ public class NewSurveyActivity extends AppCompatActivity {
     newVariable.setOnClickListener(unused -> createNewVariableDialog());
     createSurvey.setOnClickListener(unused -> {
       //Add an 'are you sure' here?
+      if (variables.isEmpty()) {
+        Toast.makeText(this, "Add a response variable first.",
+                Toast.LENGTH_SHORT).show();
+        return;
+      }
       try {
         if (FileWriter.writeFile(this, surveyFile, variables, null)) {
           Intent intent = new Intent(this, MainActivity.class);
