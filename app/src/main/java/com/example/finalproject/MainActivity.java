@@ -6,8 +6,12 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,22 +31,89 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.println(Log.ERROR, "error", "made to main activity");
     setContentView(R.layout.activity_main);
 
 
     File file = new File(getApplicationContext().getFilesDir(),
             getIntent().getStringExtra("title"));
 
+    Log.println(Log.ERROR, "error", getIntent().getStringExtra("title"));
     variables = FileReader.readVariables(getApplicationContext(), file);
     orderedSamplePoints = FileReader.readSamplePoints(getApplicationContext(), file);
 
+    Log.println(Log.ERROR, "error", orderedSamplePoints.toString());
     if (orderedSamplePoints != null) {
       alphabeticSamplePoints = ListSorter.mergeSort(orderedSamplePoints);
     }
+    LinearLayout alphaList = findViewById(R.id.samplePointContainer);
+
+    //Clear current chunks
+    alphaList.setVisibility(View.GONE);
+    alphaList.removeAllViews();
+
+    updateRecentList();
+    updateAlphaList();
     addSamplePoint("Test_Point");
     Button test = findViewById(R.id.launchFragment);
     test.setOnClickListener(unused ->
             openSamplePointFragment(orderedSamplePoints.get(orderedSamplePoints.size() - 1)));
+  }
+
+  private void updateRecentList() {
+    LinearLayout recentList = findViewById(R.id.recentSamplePointContainer);
+
+    //Clear current chunks
+    recentList.setVisibility(View.GONE);
+    recentList.removeAllViews();
+
+    for (int i = orderedSamplePoints.size() - 1; i >= 0; i--) {
+      //Add chunk
+      View sampleChunk = getLayoutInflater().inflate(R.layout.chunk_sample_point,
+              recentList, false);
+
+      //Set name
+      TextView samplePointName = sampleChunk.findViewById(R.id.pointName);
+      samplePointName.setText(orderedSamplePoints.get(i).getName());
+
+      //Setup remove button
+      final SamplePoint toRemove = orderedSamplePoints.get(i);
+      Button removeSamplePoint = sampleChunk.findViewById(R.id.removePoint);
+      removeSamplePoint.setOnClickListener(unused -> {
+        orderedSamplePoints.remove(toRemove);
+        updateRecentList();
+      });
+      recentList.addView(sampleChunk);
+    }
+    recentList.setVisibility(View.VISIBLE);
+  }
+
+  private void updateAlphaList() {
+    LinearLayout alphaList = findViewById(R.id.samplePointContainer);
+
+    //Clear current chunks
+    alphaList.setVisibility(View.GONE);
+    alphaList.removeAllViews();
+
+    for (int i = 0; i < orderedSamplePoints.size(); i++) {
+      //Add chunk
+      View sampleChunk = getLayoutInflater().inflate(R.layout.chunk_sample_point,
+              alphaList, false);
+
+      //Set name
+      TextView samplePointName = sampleChunk.findViewById(R.id.pointName);
+      samplePointName.setText(alphabeticSamplePoints.get(i).getName());
+
+      //Setup remove button
+      final SamplePoint toRemove = alphabeticSamplePoints.get(i);
+      Button removeSamplePoint = sampleChunk.findViewById(R.id.removePoint);
+      removeSamplePoint.setOnClickListener(unused -> {
+        alphabeticSamplePoints.remove(toRemove);
+        updateRecentList();
+      });
+      alphaList.addView(sampleChunk);
+    }
+    alphaList.setVisibility(View.VISIBLE);
   }
 
   private boolean addSamplePoint(@NonNull String name) {
@@ -60,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
     }
     orderedSamplePoints.add(point);
     //Update Layout
+    updateAlphaList();
     return alphabeticSamplePoints.add(point);
   }
 

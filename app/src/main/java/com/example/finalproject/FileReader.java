@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,11 +27,13 @@ public class FileReader {
           line = reader.readLine();
         }
         String contents = stringBuilder.toString();
+        Log.println(Log.ERROR,"error", contents);
         List<Variable> toReturn = new ArrayList<>();
 
         String[] dataSplit = contents.split(";");
         String[] variableLines = dataSplit[0].split("\n");
         for (String l : variableLines) {
+          Log.println(Log.ERROR, "error", l);
           String[] parts = l.split(":");
           toReturn.add(toReturn.size(), new Variable(parts[0], parts[1].equals("t")));
           if (!parts[2].equals("null")) {
