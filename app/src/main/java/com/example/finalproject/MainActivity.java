@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
       variableArray[i] = variables.get(i);
     }
     try {
-      Fragment pointView = SampleItemFragment.newInstance(variableArray, point);
+      Fragment pointView = SampleItemFragment.newInstance(variableArray, point, point.hashCode());
       FrameLayout fragmentHolder = findViewById(R.id.fragmentHolder);
 
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -103,7 +103,19 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
   }
 
 
-  public void onFragmentInteraction(Uri uri) {
+  public void updateSamplePoint(SamplePoint point, int key) {
+    for (int i = 0; i < alphabeticSamplePoints.size(); i++) {
+      if (alphabeticSamplePoints.hashCode() == key) {
+        alphabeticSamplePoints.set(i, point);
+      }
+      if (orderedSamplePoints.get(i).hashCode() == key) {
+        orderedSamplePoints.set(i, point);
+      }
+    }
+  }
+
+  public void updateVariableCategories(String category, int index) {
+    variables.get(index).addCategory(category);
   }
 
   /*@Override
