@@ -54,12 +54,6 @@ public class SampleItemFragment extends Fragment {
       variables = (Variable[]) getArguments().getParcelableArray("variables");
       key = getArguments().getInt("key");
     }
-    OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-      @Override
-      public void handleOnBackPressed() {
-        returnData();
-      }
-    };
   }
 
   @Override

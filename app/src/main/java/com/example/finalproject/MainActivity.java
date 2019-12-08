@@ -1,24 +1,36 @@
 package com.example.finalproject;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SampleItemFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements SampleItemFragment.OnFragmentInteractionListener {
 
   private List<Variable> variables;
   private List<SamplePoint> orderedSamplePoints;
@@ -27,40 +39,156 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.println(Log.ERROR, "error", "made to main activity");
     setContentView(R.layout.activity_main);
 
 
     File file = new File(getApplicationContext().getFilesDir(),
             getIntent().getStringExtra("title"));
 
+    Log.println(Log.ERROR, "error", getIntent().getStringExtra("title"));
     variables = FileReader.readVariables(getApplicationContext(), file);
     orderedSamplePoints = FileReader.readSamplePoints(getApplicationContext(), file);
 
+    Log.println(Log.ERROR, "error", orderedSamplePoints.toString());
     if (orderedSamplePoints != null) {
-      alphabeticSamplePoints = ListSorter.mergeSort(orderedSamplePoints);
+      alphabeticSamplePoints = ListSorter.mergeSort(new ArrayList<>(orderedSamplePoints));
     }
+
+    updateRecentList();
+    updateAlphaList();
+
     addSamplePoint("Test_Point");
-    Button test = findViewById(R.id.launchFragment);
-    test.setOnClickListener(unused ->
-            openSamplePointFragment(orderedSamplePoints.get(orderedSamplePoints.size() - 1)));
+    Button test = findViewById(R.id.addSamplePoint);
+    test.setOnClickListener(unused -> addSamplePoint("New_Point"));
   }
 
-  private boolean addSamplePoint(@NonNull String name) {
+  private void updateRecentList() {
+    LinearLayout recentList = findViewById(R.id.recentSamplePointContainer);
+
+    //Clear current chunks
+    recentList.setVisibility(View.GONE);
+    recentList.removeAllViews();
+
+    for (int i = orderedSamplePoints.size() - 1;
+         i >= orderedSamplePoints.size() - 5 && i >= 0; i--) {
+      //Add chunk
+      View sampleChunk = getLayoutInflater().inflate(R.layout.chunk_sample_point,
+              recentList, false);
+
+      //Set name
+      TextView samplePointName = sampleChunk.findViewById(R.id.pointName);
+      samplePointName.setText(orderedSamplePoints.get(i).getName());
+
+      //Setup remove button
+      final int toRemove = i;
+      Button removeSamplePoint = sampleChunk.findViewById(R.id.removePoint);
+      removeSamplePoint.setOnClickListener(unused -> {
+        removePointByOrder(toRemove);
+        updateAlphaList();
+        updateRecentList();
+      });
+      recentList.addView(sampleChunk);
+    }
+    recentList.setVisibility(View.VISIBLE);
+  }
+
+  private void updateAlphaList() {
+    LinearLayout alphaList = findViewById(R.id.samplePointContainer);
+
+    //Clear current chunks
+    alphaList.setVisibility(View.GONE);
+    alphaList.removeAllViews();
+
+    for (int i = 0; i < alphabeticSamplePoints.size(); i++) {
+      //Add chunk
+      View sampleChunk = getLayoutInflater().inflate(R.layout.chunk_sample_point,
+              alphaList, false);
+
+      //Set name
+      TextView samplePointName = sampleChunk.findViewById(R.id.pointName);
+      samplePointName.setText(alphabeticSamplePoints.get(i).getName());
+      samplePointName.setTextColor(Color.BLUE);
+
+      //Setup remove button
+      final int toRemove = i;
+      Button removeSamplePoint = sampleChunk.findViewById(R.id.removePoint);
+      removeSamplePoint.setOnClickListener(unused -> {
+        removePointAlphabetically(toRemove);
+        updateAlphaList();
+        updateRecentList();
+      });
+      alphaList.addView(sampleChunk);
+    }
+    alphaList.setVisibility(View.VISIBLE);
+  }
+
+  private void addSamplePoint(@NonNull String name) {
     SamplePoint point = new SamplePoint(name);
+    for (int i = 0; i < alphabeticSamplePoints.size(); i++) {
+      Log.e("a", alphabeticSamplePoints.get(i).getName());
+    }
     for (int i = 0; i < alphabeticSamplePoints.size(); i++) {
       if (name.compareTo(alphabeticSamplePoints.get(i).getName()) <= 0) {
         if (name.compareTo(alphabeticSamplePoints.get(i).getName()) == 0) {
-          return false;
+          return;
         }
         orderedSamplePoints.add(point);
         alphabeticSamplePoints.add(i, point);
         //Update layout
-        return true;
+        updateAlphaList();
+        updateRecentList();
+        return;
       }
     }
     orderedSamplePoints.add(point);
+    alphabeticSamplePoints.add(point);
     //Update Layout
-    return alphabeticSamplePoints.add(point);
+    updateAlphaList();
+    updateRecentList();
+  }
+
+  private void createNewSamplePointDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setView(R.layout.dialog_new_variable);
+
+    // Making a dialog to request title for survey
+    builder.setTitle(R.string.dialog_new_variable_title)
+            .setPositiveButton(R.string.dialog_create, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(final DialogInterface dialog, final int which) {
+                Dialog dialogView = (Dialog) dialog;
+
+                TextView variablePrompt = dialogView.findViewById(R.id.variablePrompt);
+                ToggleButton variableTypeButton = dialogView.findViewById(R.id.variableTypeButton);
+
+                if (variablePrompt.getText().toString().equals("")) {
+                  //Alert user somehow
+                  return;
+                }
+
+                for (int i = 0; i < variables.size(); i++) {
+                  if (variablePrompt.getText().toString().equals(variables.get(i).getName())) {
+                    Toast sameName = Toast.makeText(getApplicationContext(),
+                            "'" + variablePrompt.getText().toString()
+                                    + "'" + " is already a variable name.",
+                            Toast.LENGTH_LONG);
+                    sameName.show();
+                    return;
+                  }
+                }
+                addSamplePoint(variablePrompt.getText().toString());
+
+                updateAlphaList();
+                updateRecentList();
+              }
+            })
+            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(final DialogInterface dialog, final int which) {
+              }
+            });
+    builder.show();
   }
 
   private void removePointAlphabetically(int alphabeticIndex) {
@@ -86,8 +214,6 @@ public class MainActivity extends AppCompatActivity implements SampleItemFragmen
 
       transaction.commit();
       setTitle(point.getName());
-
-      Button test = findViewById(R.id.launchFragment);
     } catch (Exception e) {
       Log.e("fragment", "caught at main activity" + e.toString());
     }
