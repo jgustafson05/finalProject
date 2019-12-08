@@ -77,7 +77,9 @@ public class MainActivity extends AppCompatActivity
       //Set name
       TextView samplePointName = sampleChunk.findViewById(R.id.pointName);
       samplePointName.setText(orderedSamplePoints.get(i).getName());
-
+      samplePointName.setOnClickListener(unused -> {
+        openSamplePointFragment(orderedSamplePoints.get(i));
+      });
       //Setup remove button
       final int toRemove = i;
       Button removeSamplePoint = sampleChunk.findViewById(R.id.removePoint);
@@ -107,6 +109,9 @@ public class MainActivity extends AppCompatActivity
       TextView samplePointName = sampleChunk.findViewById(R.id.pointName);
       samplePointName.setText(alphabeticSamplePoints.get(i).getName());
       samplePointName.setTextColor(Color.BLUE);
+      samplePointName.setOnClickListener(unused -> {
+        openSamplePointFragment(alphabeticSamplePoints.get(i));
+      });
 
       //Setup remove button
       final int toRemove = i;
