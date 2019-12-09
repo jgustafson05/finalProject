@@ -166,4 +166,17 @@ public class SamplePoint implements Comparable<SamplePoint>, Parcelable {
   public void setName(String newName) {
     name = newName;
   }
+
+  public int hashCode() {
+    int hash = 41;
+    hash = 31 * hash + name.hashCode();
+    for (Variable v : valueMap.keySet()) {
+      hash = 31 * hash + v.hashCode();
+    }
+    for (Value v : valueMap.values()) {
+      hash = 31 * hash + (v.categorical ? 3 : 7);
+      hash = 31 * hash + (int) (v.getValue() * 100);
+    }
+    return hash;
+  }
 }

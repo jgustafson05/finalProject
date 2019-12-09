@@ -41,10 +41,13 @@ public class MainActivity extends AppCompatActivity
 
     Log.println(Log.ERROR, "error", getIntent().getStringExtra("title"));
     variables = FileReader.readVariables(getApplicationContext(), file);
-    orderedSamplePoints = FileReader.readSamplePoints(getApplicationContext(), file);
+    orderedSamplePoints = FileReader.readSamplePoints(getApplicationContext(), file, variables);
 
     if (orderedSamplePoints != null) {
       alphabeticSamplePoints = ListSorter.mergeSort(new ArrayList<>(orderedSamplePoints));
+    }
+    for (SamplePoint s : alphabeticSamplePoints) {
+      Log.e("main", Boolean.toString(s.valueIsSet(variables.get(0))));
     }
 
     updateRecentList();
@@ -231,6 +234,9 @@ public class MainActivity extends AppCompatActivity
     transaction.commit();
     Button addSamplePoint = findViewById(R.id.addSamplePoint);
     addSamplePoint.setVisibility(View.VISIBLE);
+    File file = new File(getApplicationContext().getFilesDir(),
+            getIntent().getStringExtra("title"));
+    FileWriter.writeFile(getApplicationContext(), file, variables, orderedSamplePoints);
   }
 
   public void updateVariableCategories(String category, int index) {

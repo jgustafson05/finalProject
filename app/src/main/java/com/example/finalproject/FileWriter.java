@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ public class FileWriter {
   public static boolean writeVariables(Context context, File file, List<Variable> variables) {
 
     file.delete();
+    Log.e("writer", "writing");
     try {
       file.createNewFile();
     } catch (Exception e) {
@@ -59,6 +61,7 @@ public class FileWriter {
                                   @Nullable List<SamplePoint> samplePoints) {
 
     file.delete();
+    Log.e("writer", "writing");
     try {
       file.createNewFile();
     } catch (Exception e) {
@@ -95,7 +98,11 @@ public class FileWriter {
         StringBuilder newLine = new StringBuilder(samplePoints.get(i).getName()).append(":");
         for (int j = 0; j < variables.size(); j++) {
           try {
-            newLine.append(samplePoints.get(i).getValue(variables.get(j)));
+            if (variables.get(j).isCategorical()) {
+              newLine.append((int) samplePoints.get(i).getValue(variables.get(j)));
+            } else {
+              newLine.append(samplePoints.get(i).getValue(variables.get(j)));
+            }
           } catch (NullPointerException e) {
             newLine.append("n");
           } finally {
@@ -107,6 +114,7 @@ public class FileWriter {
       }
     }
     String fileContents = fileContentsBuilder.toString();
+    Log.e("writer", fileContents);
 
     try (FileOutputStream fos = context.openFileOutput(file.getName(), Context.MODE_PRIVATE)) {
       fos.write(fileContents.getBytes());

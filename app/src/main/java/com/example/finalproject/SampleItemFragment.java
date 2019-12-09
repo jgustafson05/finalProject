@@ -157,7 +157,6 @@ public class SampleItemFragment extends Fragment {
               case EditorInfo.IME_ACTION_DONE:
               case EditorInfo.IME_ACTION_NEXT:
               case EditorInfo.IME_ACTION_PREVIOUS:
-              case EditorInfo.IME_ACTION_NONE:
                 if (v.getText().toString().equals("")) {
                   point.setValue(variables[index], 0.0);
                   v.setText("0.0");

@@ -54,7 +54,8 @@ public class FileReader {
     }
   }
 
-  public static List<SamplePoint> readSamplePoints(Context context, File file) {
+  public static List<SamplePoint> readSamplePoints(Context context, File file,
+                                                   List<Variable> matchedList) {
     try {
       FileInputStream fis = context.openFileInput(file.getName());
       InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
@@ -67,40 +68,33 @@ public class FileReader {
         }
         String contents = stringBuilder.toString();
 
-        List<Variable> matchedList = new ArrayList<>();
-
         String[] dataSplit = contents.split(";");
         if (dataSplit.length == 1) {
           return new ArrayList<>();
-        }
-        String[] variableLines = dataSplit[0].split("\n");
-        for (String l : variableLines) {
-          String[] parts = l.split(":");
-          matchedList.add(matchedList.size(), new Variable(parts[0], parts[1].equals("t")));
-          if (!parts[2].equals("null")) {
-            String[] categories = parts[2].split(",");
-            for (String c : categories) {
-              matchedList.get(matchedList.size() - 1).addCategory(c);
-            }
-          }
         }
         List<SamplePoint> toReturn = new ArrayList<>();
 
         String[] lines = dataSplit[1].split("\n");
 
-        for (int i = 1; i < lines.length; i++) {
+        for (int i = 0; i < lines.length; i++) {
           String[] dataPoints = lines[i].split(":");
           toReturn.add(new SamplePoint(dataPoints[0]));
           for (int j = 0; j < matchedList.size(); j++) {
-            if (matchedList.get(j) == null || !dataPoints[j + 1].equals("n")) {
+            if (matchedList.get(j) == null || dataPoints[j + 1].equals("n")) {
               continue;
             }
             if (matchedList.get(j).isCategorical()) {
               toReturn.get(i).setValue(matchedList.get(j), Integer.parseInt(dataPoints[j + 1]));
+              Log.e("reader", Double.toString(toReturn.get(i).getValue(matchedList.get(j))));
             } else {
               toReturn.get(i).setValue(matchedList.get(j), Double.parseDouble(dataPoints[j + 1]));
+              Log.e("reader", Double.toString(toReturn.get(i).getValue(matchedList.get(j))));
             }
           }
+        }
+        for (SamplePoint s : toReturn) {
+          Log.e("eee", s.getName());
+          Log.e("eee", Boolean.toString(s.valueIsSet((matchedList.get(0)))));
         }
         return toReturn;
       } catch (IOException e) {

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -45,21 +46,17 @@ public class  NewSurveyActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
         return;
       }
-      try {
-        if (FileWriter.writeFile(this, surveyFile, variables, null)) {
-          Intent intent = new Intent(this, MainActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("title", surveyTitle);
-          //Add to intent here
+      if (FileWriter.writeFile(this, surveyFile, variables, null)) {
+        Intent intent = new Intent(this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("title", surveyTitle);
+        //Add to intent here
 
-          intent.putExtras(bundle);
-          startActivity(intent);
-          finish();
-        } else {
-          surveyFile.delete();
-        }
-      } catch (Exception e) {
-        Toast.makeText(this, "Not enough space", Toast.LENGTH_SHORT).show();
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+      } else {
+        surveyFile.delete();
       }
     });
   }
