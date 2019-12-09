@@ -18,7 +18,7 @@ import java.util.Set;
  * must be updated when variables are added or removed */
 public class SamplePoint implements Comparable<SamplePoint>, Parcelable {
 
-  protected class Value {
+  private class Value {
 
     private boolean categorical;
 

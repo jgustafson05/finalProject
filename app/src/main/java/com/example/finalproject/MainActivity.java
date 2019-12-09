@@ -241,17 +241,10 @@ public class MainActivity extends AppCompatActivity
 
   public void updateVariableCategories(String category, int index) {
 
-    Variable old = variables.get(index).copy();
+    Variable old = variables.get(index);
 
-    variables.get(index).addCategory(category);
-    Variable updated = variables.get(index);
-
-    for (SamplePoint s : alphabeticSamplePoints) {
-      if (s.valueIsSet(old)) {
-        Log.e("main", "updated");
-        s.setValue(updated, (int) s.getValue(old));
-      }
-    }
+    Variable updated = variables.get(index).copy();
+    updated.addCategory(category);
 
     for (SamplePoint s : orderedSamplePoints) {
       if (s.valueIsSet(old)) {
@@ -259,8 +252,7 @@ public class MainActivity extends AppCompatActivity
         s.setValue(updated, (int) s.getValue(old));
       }
     }
-
-
+    old.addCategory(category);
   }
 
   /*@Override

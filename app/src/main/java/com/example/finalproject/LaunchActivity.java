@@ -88,7 +88,6 @@ public class LaunchActivity extends AppCompatActivity {
 
         TextView fileName = fileChunk.findViewById(R.id.fileName);
         fileName.setText(fileArray[i].getName());
-        //ADD SOME FUNCTIONALITY
 
         fileName.setOnClickListener(unused -> {
           //Add some make sures here in the future.
@@ -116,8 +115,6 @@ public class LaunchActivity extends AppCompatActivity {
             Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
           }
         });
-
-        registerForContextMenu(fileName);
 
         fileContainer.addView(fileChunk);
       }

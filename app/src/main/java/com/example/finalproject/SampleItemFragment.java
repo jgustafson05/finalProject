@@ -211,6 +211,7 @@ public class SampleItemFragment extends Fragment {
                   if (variables[variableIndex].getCategories().get(i).equals(categoryName)) {
                     Toast.makeText(requireContext().getApplicationContext(),
                             "The variable already has this category", Toast.LENGTH_SHORT).show();
+                    updateLayout(null);
                     return;
                   }
                 }
