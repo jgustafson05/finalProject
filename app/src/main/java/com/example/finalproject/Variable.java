@@ -128,6 +128,16 @@ public class Variable implements Comparable<Variable>, Parcelable {
     return categories;
   }
 
+  public Variable copy() {
+    Variable toReturn = new Variable(name, categorical);
+    if (toReturn.isCategorical()) {
+      for (String s : categories) {
+        toReturn.addCategory(s);
+      }
+    }
+    return toReturn;
+  }
+
   public String getName() {
     return name;
   }

@@ -214,7 +214,7 @@ public class SampleItemFragment extends Fragment {
                     return;
                   }
                 }
-                variables[variableIndex].addCategory(categoryName);
+                interactionListener.updateVariableCategories(categoryName, variableIndex);
 
                 updateLayout(null);
               }
