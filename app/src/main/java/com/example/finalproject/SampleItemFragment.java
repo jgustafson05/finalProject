@@ -3,7 +3,6 @@ package com.example.finalproject;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,14 +12,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.ComponentActivity;
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -38,11 +36,12 @@ import java.util.List;
 public class SampleItemFragment extends Fragment {
   private static final String ARG_SAMPLE_POINT = "sample_point";
 
+  private List<String> forbidSpinner = new ArrayList<>();
   private int key;
   private SamplePoint point;
   private Variable[] variables;
 
-  private OnFragmentInteractionListener mListener;
+  private OnFragmentInteractionListener interactionListener;
 
   public SampleItemFragment() {
     // Required empty public constructor
@@ -50,11 +49,12 @@ public class SampleItemFragment extends Fragment {
 
   public static SampleItemFragment newInstance(Variable[] variableArray, SamplePoint samplePoint,
                                                int hashCode) {
-    SampleItemFragment fragment = new SampleItemFragment();
     Bundle args = new Bundle();
     args.putParcelableArray("variables", variableArray);
     args.putParcelable("point", samplePoint);
     args.putInt("key", hashCode);
+
+    SampleItemFragment fragment = new SampleItemFragment();
     fragment.setArguments(args);
     return fragment;
   }
@@ -74,10 +74,38 @@ public class SampleItemFragment extends Fragment {
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_sample_item, container, false);
-    LinearLayout variableHolder = view.findViewById(R.id.fragmentVariables);
+
+    // Button Listener
+    Button returnToActivity = view.findViewById(R.id.returnToActivity);
+    returnToActivity.setOnClickListener(unused -> returnData());
+
+    updateLayout(view);
+    return view;
+  }
+
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    if (context instanceof OnFragmentInteractionListener) {
+      interactionListener = (OnFragmentInteractionListener) context;
+    } else {
+      throw new RuntimeException(context.toString()
+              + " must implement OnFragmentInteractionListener");
+    }
+  }
+
+  private void updateLayout(View fragmentView) {
+
+    if (fragmentView == null) {
+      fragmentView = getView();
+    }
+    LinearLayout variableHolder = fragmentView.findViewById(R.id.fragmentVariables);
+    variableHolder.setVisibility(View.GONE);
+    variableHolder.removeAllViews();
 
     for (int i = 0; i < variables.length; i++) {
-      View variableChunk = inflater.inflate(R.layout.chunk_dialog_variable, variableHolder, false);
+      View variableChunk = getLayoutInflater().inflate(R.layout.chunk_dialog_variable,
+              variableHolder, false);
 
       TextView variableName = variableChunk.findViewById(R.id.chunkVariableName);
       Spinner variableCategories = variableChunk.findViewById(R.id.chunkCategories);
@@ -85,10 +113,13 @@ public class SampleItemFragment extends Fragment {
       final int index = i;
 
       variableName.setText(variables[i].getName());
+
       if (variables[i].isCategorical()) {
         variableValue.setVisibility(View.GONE);
         ArrayList<String> categoriesList = new ArrayList<>(variables[i].getCategories());
-        categoriesList.add(0, "");
+        if (categoriesList.isEmpty()) {
+          categoriesList.add(0, "");
+        }
         categoriesList.add("(Add new category)");
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(requireContext(),
@@ -96,15 +127,18 @@ public class SampleItemFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         variableCategories.setAdapter(adapter);
+        if (point.valueIsSet(variables[i])) {
+          variableCategories.setSelection((int) point.getValue(variables[i]));
+        }
 
         variableCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
           @Override
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if (position == categoriesList.size() - 1) {
-              createNewCategoryDialog(variables[index], index);
-            } else if (position > 0) {
-              point.setValue(variables[index], position);
+              createNewCategoryDialog(index, variableCategories);
             }
+            point.setValue(variables[index], position);
+            Log.e("eee", Integer.toString(position));
           }
 
           @Override
@@ -113,6 +147,9 @@ public class SampleItemFragment extends Fragment {
         });
       } else {
         variableCategories.setVisibility(View.GONE);
+        if (point.valueIsSet(variables[i])) {
+          variableValue.setText(Double.toString((point.getValue(variables[i]))));
+        }
         variableValue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
           @Override
           public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -120,41 +157,36 @@ public class SampleItemFragment extends Fragment {
               case EditorInfo.IME_ACTION_DONE:
               case EditorInfo.IME_ACTION_NEXT:
               case EditorInfo.IME_ACTION_PREVIOUS:
-                point.setValue(variables[index], Double.parseDouble(v.getText().toString()));
-                return true;
+              case EditorInfo.IME_ACTION_NONE:
+                if (v.getText().toString().equals("")) {
+                  point.setValue(variables[index], 0.0);
+                  v.setText("0.0");
+                } else {
+                  point.setValue(variables[index], Double.parseDouble(v.getText().toString()));
+                  Log.e("eee", v.getText().toString());
+                }
+                v.clearFocus();
+                return false;
               default:
                 return false;
             }
           }
         });
       }
-
       variableHolder.addView(variableChunk);
     }
-
-    return view;
-  }
-
-  @Override
-  public void onAttach(Context context) {
-    super.onAttach(context);
-    if (context instanceof OnFragmentInteractionListener) {
-      mListener = (OnFragmentInteractionListener) context;
-    } else {
-      throw new RuntimeException(context.toString()
-              + " must implement OnFragmentInteractionListener");
-    }
+    variableHolder.setVisibility(View.VISIBLE);
   }
 
 
   public void returnData() {
-    mListener.updateSamplePoint(point, key);
+    interactionListener.updateSamplePoint(this, point, key);
   }
 
-  private void createNewCategoryDialog(Variable categoricalVariable, int index)
+  private void createNewCategoryDialog(int variableIndex, Spinner toUpdate)
           throws IllegalArgumentException {
 
-    if (!categoricalVariable.isCategorical()) {
+    if (!variables[variableIndex].isCategorical()) {
       throw new IllegalArgumentException("variable is not categorical");
     }
 
@@ -176,15 +208,16 @@ public class SampleItemFragment extends Fragment {
                   return;
                 }
                 String categoryName = dialogPrompt.getText().toString();
-                for (int i = 0; i < categoricalVariable.getCategories().size(); i++) {
-                  if (categoricalVariable.getCategories().get(i).equals(categoryName)) {
+                for (int i = 0; i < variables[variableIndex].getCategories().size(); i++) {
+                  if (variables[variableIndex].getCategories().get(i).equals(categoryName)) {
                     Toast.makeText(requireContext().getApplicationContext(),
                             "The variable already has this category", Toast.LENGTH_SHORT).show();
                     return;
                   }
                 }
-                categoricalVariable.addCategory(categoryName);
-                mListener.updateVariableCategories(categoryName, index);
+                variables[variableIndex].addCategory(categoryName);
+
+                updateLayout(null);
               }
             })
             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -195,20 +228,30 @@ public class SampleItemFragment extends Fragment {
     builder.show();
   }
 
+  public void onPause() {
+    super.onPause();
+    returnData();
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    returnData();
+  }
+
   @Override
   public void onDetach() {
     super.onDetach();
-    returnData();
-    mListener = null;
+    interactionListener = null;
   }
 
   public void setOnFragmentInteractionListener(OnFragmentInteractionListener callback) {
-    mListener = callback;
+    interactionListener = callback;
   }
 
   public interface OnFragmentInteractionListener {
-    // TODO: Update argument type and name
-    void updateSamplePoint(SamplePoint updatedPoint, int key);
+    void updateSamplePoint(SampleItemFragment thisFragment, SamplePoint updatedPoint, int key);
+
     void updateVariableCategories(String category, int index);
   }
 }

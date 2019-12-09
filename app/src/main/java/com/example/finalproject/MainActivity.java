@@ -2,21 +2,15 @@ package com.example.finalproject;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -48,11 +42,7 @@ public class MainActivity extends AppCompatActivity
     Log.println(Log.ERROR, "error", getIntent().getStringExtra("title"));
     variables = FileReader.readVariables(getApplicationContext(), file);
     orderedSamplePoints = FileReader.readSamplePoints(getApplicationContext(), file);
-    for (Variable v : variables) {
-      Log.e("eee", v.getName());
-    }
 
-    Log.println(Log.ERROR, "error", orderedSamplePoints.toString());
     if (orderedSamplePoints != null) {
       alphabeticSamplePoints = ListSorter.mergeSort(new ArrayList<>(orderedSamplePoints));
     }
@@ -204,20 +194,16 @@ public class MainActivity extends AppCompatActivity
     for (int i = 0; i < variables.size(); i++) {
       variableArray[i] = variables.get(i);
     }
-    try {
-      Fragment pointView = SampleItemFragment.newInstance(variableArray, point, point.hashCode());
+    Fragment pointView = SampleItemFragment.newInstance(variableArray, point, point.hashCode());
 
-      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-      transaction.replace(R.id.fragmentHolder, pointView);
-      transaction.addToBackStack(null);
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.replace(R.id.fragmentHolder, pointView);
+    transaction.addToBackStack(null);
 
-      transaction.commit();
-      setTitle(point.getName());
-    } catch (Exception e) {
-      Log.e("fragment", "caught at main activity" + e.toString());
-    }
-
-
+    transaction.commit();
+    setTitle(point.getName());
+    Button addSamplePoint = findViewById(R.id.addSamplePoint);
+    addSamplePoint.setVisibility(View.GONE);
   }
 
   public void onAttachFragment(Fragment fragment) {
@@ -227,16 +213,24 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-
-  public void updateSamplePoint(SamplePoint point, int key) {
+  public void updateSamplePoint(SampleItemFragment fragment, SamplePoint point, int key) {
     for (int i = 0; i < alphabeticSamplePoints.size(); i++) {
       if (alphabeticSamplePoints.hashCode() == key) {
         alphabeticSamplePoints.set(i, point);
-      }
-      if (orderedSamplePoints.get(i).hashCode() == key) {
-        orderedSamplePoints.set(i, point);
+        break;
       }
     }
+    for (int i = 0; i < orderedSamplePoints.size(); i++) {
+      if (orderedSamplePoints.get(i).hashCode() == key) {
+        orderedSamplePoints.set(i, point);
+        break;
+      }
+    }
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.remove(fragment);
+    transaction.commit();
+    Button addSamplePoint = findViewById(R.id.addSamplePoint);
+    addSamplePoint.setVisibility(View.VISIBLE);
   }
 
   public void updateVariableCategories(String category, int index) {
