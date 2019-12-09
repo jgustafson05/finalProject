@@ -1,6 +1,8 @@
 package com.example.finalproject;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -65,7 +67,6 @@ public class FileWriter {
     try {
       file.createNewFile();
     } catch (Exception e) {
-      Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
       return false;
     }
 
@@ -125,4 +126,42 @@ public class FileWriter {
     return true;
   }
 
+  public static boolean writeCsv(Context context, Uri uri,
+                                  List<Variable> variables, List<SamplePoint> samplePoints) {
+    try {
+      ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "w");
+      FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+
+      StringBuilder fileContentsBuilder = new StringBuilder("Name,");
+      for (Variable v : variables) {
+        fileContentsBuilder.append(v.getName()).append(",");
+      }
+      fileContentsBuilder.deleteCharAt(fileContentsBuilder.length() - 1);
+      fileContentsBuilder.append("\n");
+      for (SamplePoint s : samplePoints) {
+        fileContentsBuilder.append(s.getName()).append(",");
+        for (Variable v : variables) {
+          if (!s.valueIsSet(v)) {
+            fileContentsBuilder.append("");
+          } else if (v.isCategorical()) {
+            fileContentsBuilder.append(v.getCategories().get((int) s.getValue(v)));
+          } else {
+            fileContentsBuilder.append(s.getValue(v));
+          }
+          fileContentsBuilder.append(",");
+        }
+        fileContentsBuilder.deleteCharAt(fileContentsBuilder.length() - 1);
+        fileContentsBuilder.append("\n");
+      }
+      Log.e("csv_contents", fileContentsBuilder.toString());
+      fos.write(fileContentsBuilder.toString().getBytes());
+      fos.close();
+      pfd.close();
+      return true;
+    } catch (Exception e) {
+      Log.e("writer", "stack trace coming");
+      Log.e("writer", Log.getStackTraceString(e));
+      return false;
+    }
+  }
 }

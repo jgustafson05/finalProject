@@ -1,11 +1,16 @@
 package com.example.finalproject;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -25,6 +30,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements SampleItemFragment.OnFragmentInteractionListener {
+
+  private static int CSV_REQUEST_CODE = 1;
 
   private List<Variable> variables;
   private List<SamplePoint> orderedSamplePoints;
@@ -52,9 +59,6 @@ public class MainActivity extends AppCompatActivity
 
     updateRecentList();
     updateAlphaList();
-
-    Button test = findViewById(R.id.addSamplePoint);
-    test.setOnClickListener(unused -> createNewSamplePointDialog());
   }
 
   private void updateRecentList() {
@@ -255,24 +259,45 @@ public class MainActivity extends AppCompatActivity
     old.addCategory(category);
   }
 
-  /*@Override
+  private void createCsv() {
+    File file = new File(getApplicationContext().getFilesDir(),
+            getIntent().getStringExtra("title"));
+    FileWriter.writeFile(getApplicationContext(), file, variables, orderedSamplePoints);
+    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("text/csv");
+    intent.putExtra(Intent.EXTRA_TITLE, getIntent().getStringExtra("title") + ".csv");
+
+    startActivityForResult(intent, CSV_REQUEST_CODE);
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+    if (requestCode == CSV_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+      if (resultData != null) {
+        FileWriter.writeCsv(this, resultData.getData(), variables, alphabeticSamplePoints);
+      }
+    }
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_scrolling, menu);
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.menu_main, menu);
     return true;
   }
 
   @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menuAddItem:
+        createNewSamplePointDialog();
+        return true;
+      case R.id.menuExport:
+        createCsv();
+        return true;
+      default: return false;
     }
-    return super.onOptionsItemSelected(item);
-  }*/
+  }
+
 }
