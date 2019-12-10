@@ -135,10 +135,10 @@ public class SampleItemFragment extends Fragment {
           @Override
           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if (position == categoriesList.size() - 1) {
-              createNewCategoryDialog(index, variableCategories);
+              createNewCategoryDialog(index, (categoriesList.get(0).equals("")));
+            } else {
+              point.setValue(variables[index], position);
             }
-            point.setValue(variables[index], position);
-            Log.e("eee", Integer.toString(position));
           }
 
           @Override
@@ -179,10 +179,15 @@ public class SampleItemFragment extends Fragment {
 
 
   public void returnData() {
+    for (Variable v : variables) {
+      if (v.isCategorical() && !point.valueIsSet(v) && !v.getCategories().isEmpty()) {
+        point.setValue(v, 0);
+      }
+    }
     interactionListener.updateSamplePoint(this, point, key);
   }
 
-  private void createNewCategoryDialog(int variableIndex, Spinner toUpdate)
+  private void createNewCategoryDialog(int variableIndex, boolean first)
           throws IllegalArgumentException {
 
     if (!variables[variableIndex].isCategorical()) {
@@ -215,7 +220,19 @@ public class SampleItemFragment extends Fragment {
                     return;
                   }
                 }
-                interactionListener.addVariableCategory(categoryName, variableIndex);
+                Variable updated = variables[variableIndex].copy();
+                updated.addCategory(categoryName);
+
+                if (!variables[variableIndex].getCategories().isEmpty()) {
+                  final String selected = variables[variableIndex].getCategories()
+                          .get((int) point.getValue(variables[variableIndex]));
+                  point.setValue(updated, updated.getCategories().indexOf(selected));
+                } else {
+                  point.setValue(updated, 0);
+                }
+                interactionListener.addVariableCategory(updated, variableIndex);
+                variables[variableIndex] = updated;
+
 
                 updateLayout(null);
               }
@@ -252,6 +269,6 @@ public class SampleItemFragment extends Fragment {
   public interface OnFragmentInteractionListener {
     void updateSamplePoint(SampleItemFragment thisFragment, SamplePoint updatedPoint, int key);
 
-    void addVariableCategory(String category, int index);
+    void addVariableCategory(Variable updated, int index);
   }
 }

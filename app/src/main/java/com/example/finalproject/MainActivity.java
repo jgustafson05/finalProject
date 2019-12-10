@@ -237,14 +237,12 @@ public class MainActivity extends AppCompatActivity
     File file = new File(getApplicationContext().getFilesDir(),
             getIntent().getStringExtra("title"));
     FileWriter.writeFile(getApplicationContext(), file, variables, orderedSamplePoints);
+    setTitle(getIntent().getStringExtra("title"));
   }
 
-  public void addVariableCategory(String category, int index) {
+  public void addVariableCategory(Variable updated, int index) {
 
     Variable old = variables.get(index);
-
-    Variable updated = variables.get(index).copy();
-    updated.addCategory(category);
 
     for (SamplePoint s : orderedSamplePoints) {
       if (s.valueIsSet(old)) {
@@ -252,7 +250,7 @@ public class MainActivity extends AppCompatActivity
         s.setValue(updated, (int) s.getValue(old));
       }
     }
-    old.addCategory(category);
+    variables.set(index, updated);
   }
 
   private void createCsv() {

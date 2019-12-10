@@ -152,6 +152,11 @@ public class Variable implements Comparable<Variable>, Parcelable {
 
   public void setCategorical(boolean isCategorical) {
     categorical = isCategorical;
+    if (isCategorical) {
+      categories = new ArrayList<>();
+    } else {
+      categories = null;
+    }
   }
 
   public void writeToParcel(Parcel out, int flags) {
