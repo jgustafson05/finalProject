@@ -6,9 +6,10 @@
 
     <TextView
         android:id="@+id/chunkVariableName"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:textColor="@android:color/primary_text_light" />
 
     <Spinner
         android:id="@+id/chunkCategories"

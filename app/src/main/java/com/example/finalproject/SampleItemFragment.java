@@ -215,7 +215,7 @@ public class SampleItemFragment extends Fragment {
                     return;
                   }
                 }
-                interactionListener.updateVariableCategories(categoryName, variableIndex);
+                interactionListener.addVariableCategory(categoryName, variableIndex);
 
                 updateLayout(null);
               }
@@ -252,6 +252,6 @@ public class SampleItemFragment extends Fragment {
   public interface OnFragmentInteractionListener {
     void updateSamplePoint(SampleItemFragment thisFragment, SamplePoint updatedPoint, int key);
 
-    void updateVariableCategories(String category, int index);
+    void addVariableCategory(String category, int index);
   }
 }

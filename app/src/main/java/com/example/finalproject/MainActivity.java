@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
     recentList.removeAllViews();
 
     for (int i = orderedSamplePoints.size() - 1;
-         i >= orderedSamplePoints.size() - 5 && i >= 0; i--) {
+         i >= orderedSamplePoints.size() - 3 && i >= 0; i--) {
       //Add chunk
       View sampleChunk = getLayoutInflater().inflate(R.layout.chunk_sample_point,
               recentList, false);
@@ -209,8 +209,6 @@ public class MainActivity extends AppCompatActivity
 
     transaction.commit();
     setTitle(point.getName());
-    Button addSamplePoint = findViewById(R.id.addSamplePoint);
-    addSamplePoint.setVisibility(View.GONE);
   }
 
   public void onAttachFragment(Fragment fragment) {
@@ -236,14 +234,12 @@ public class MainActivity extends AppCompatActivity
     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
     transaction.remove(fragment);
     transaction.commit();
-    Button addSamplePoint = findViewById(R.id.addSamplePoint);
-    addSamplePoint.setVisibility(View.VISIBLE);
     File file = new File(getApplicationContext().getFilesDir(),
             getIntent().getStringExtra("title"));
     FileWriter.writeFile(getApplicationContext(), file, variables, orderedSamplePoints);
   }
 
-  public void updateVariableCategories(String category, int index) {
+  public void addVariableCategory(String category, int index) {
 
     Variable old = variables.get(index);
 
