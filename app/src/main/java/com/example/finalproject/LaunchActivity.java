@@ -102,19 +102,10 @@ public class LaunchActivity extends AppCompatActivity {
           finish();
         });
 
-        fileName.setOnLongClickListener(unused -> {
-          // TODO: Make this open a rename file dialog.
-          return true;
-        });
-
         Button delete = fileChunk.findViewById(R.id.delete);
 
         final File toDelete = fileArray[i];
-        delete.setOnClickListener(unused ->  {
-          if (toDelete.delete()) {
-            Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
-          }
-        });
+        delete.setOnClickListener(unused -> toDelete.delete());
 
         fileContainer.addView(fileChunk);
       }

@@ -70,7 +70,7 @@ public class Variable implements Comparable<Variable>, Parcelable {
     if (!categorical) {
       throw new NullPointerException("A quantitative variable does not have categories.");
     }
-    for (int i = 1; i < categories.size(); i++) {
+    for (int i = 0; i < categories.size(); i++) {
       if (category.compareTo(categories.get(i)) <= 0) {
         if (category.compareTo(categories.get(i)) == 0)  {
           return false;
@@ -95,30 +95,6 @@ public class Variable implements Comparable<Variable>, Parcelable {
     return categories.remove(category);
   }
 
-  /**
-   * Moves category to front of the list as default and puts old default back in lexographic order.
-   * @param index index of the new default category
-   * @return true if the array is large enough to set a default
-   * @throws NullPointerException if this variable is not categorical
-   * @throws IndexOutOfBoundsException if the index is out of range
-   */
-  public boolean setDefaultCategory(int index)
-          throws NullPointerException, IndexOutOfBoundsException {
-    if (!categorical) {
-      throw new NullPointerException("A quantitative variable does not have categories.");
-    }
-    if (categories.size() == 0 || categories.size() == 1) {
-      return false;
-    }
-    categories.add(0, categories.remove(index));
-    for (int i = 2; i < categories.size(); i++) {
-      if (categories.get(1).compareTo(categories.get(i)) <= 0) {
-        categories.add(i, categories.remove(1));
-        return true;
-      }
-    }
-    return categories.add(categories.remove(1));
-  }
 
   /**
    * Returns the list of categories.

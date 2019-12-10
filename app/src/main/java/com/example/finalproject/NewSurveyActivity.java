@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -160,16 +159,6 @@ public class  NewSurveyActivity extends AppCompatActivity {
     variablesList.setVisibility(View.VISIBLE);
   }
 
-  private boolean setResponseVariable(int index) {
-    if (variables.size() == 0 || variables.size() == 1) {
-      return false;
-    }
-    if (index < 0 || index >= variables.size()) {
-      return false;
-    }
-    variables.add(0, variables.remove(index));
-    return addVariable(variables.remove(1));
-  }
 
   private boolean addVariable(Variable variable) {
     //Places new variable in lexicographic order

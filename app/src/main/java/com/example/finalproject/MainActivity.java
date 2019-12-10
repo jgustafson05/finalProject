@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity
       //Set name
       TextView samplePointName = sampleChunk.findViewById(R.id.pointName);
       samplePointName.setText(alphabeticSamplePoints.get(i).getName());
-      samplePointName.setTextColor(Color.BLUE);
 
 
       final int index = i;
