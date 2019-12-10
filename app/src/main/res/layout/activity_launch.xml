@@ -4,31 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#063044"
     tools:context=".LaunchActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/convergence"
+        android:text="@string/easy_survey"
+        android:textAlignment="center"
+        android:textColor="#C8C8C8"
+        android:textSize="45sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="410dp"
         android:layout_height="48dp"
+        android:layout_marginBottom="100dp"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/loadFile"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/load_file_button" />
+            android:fontFamily="@font/doppio_one"
+            android:text="@string/load_file_button"
+            android:textAlignment="center"
+            android:textColor="#C8C8C8"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/createFile"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/new_file_button" />
+            android:fontFamily="@font/doppio_one"
+            android:text="@string/new_file_button"
+            android:textAlignment="center"
+            android:textColor="#C8C8C8"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/loadFile" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

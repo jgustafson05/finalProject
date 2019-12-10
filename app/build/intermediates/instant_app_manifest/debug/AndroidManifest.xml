@@ -29,6 +29,10 @@
         <activity android:name="com.example.finalproject.NewSurveyActivity" />
         <activity android:name="com.example.finalproject.MainActivity" />
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
         <service
             android:name="androidx.room.MultiInstanceInvalidationService"
             android:exported="false" />
